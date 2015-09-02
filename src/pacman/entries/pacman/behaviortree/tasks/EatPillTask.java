@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman.entries.pacman.behaviortree.tasks;
 
 import pacman.entries.pacman.behaviortree.MyPacMan;
@@ -25,7 +20,6 @@ public class EatPillTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
-        System.out.println("Eat nearest pill");
         int current = game.getPacmanCurrentNodeIndex();
         int[] pills = game.getActivePillsIndices();
         int[] powerPills = game.getActivePowerPillsIndices();

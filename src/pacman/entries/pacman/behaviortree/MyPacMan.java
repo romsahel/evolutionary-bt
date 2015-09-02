@@ -1,18 +1,13 @@
 package pacman.entries.pacman.behaviortree;
 
-import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.entries.pacman.behaviortree.helpers.Selector;
 import pacman.entries.pacman.behaviortree.helpers.Sequence;
-import java.util.ArrayList;
-import java.util.function.Predicate;
-import javafx.util.Pair;
 import pacman.controllers.Controller;
 import pacman.entries.pacman.behaviortree.tasks.ChaseTask;
 import pacman.entries.pacman.behaviortree.tasks.EatPillTask;
 import pacman.entries.pacman.behaviortree.tasks.IsGhostEdibleTask;
 import pacman.entries.pacman.behaviortree.tasks.IsGhostNearTask;
 import pacman.entries.pacman.behaviortree.tasks.RunAwayTask;
-import pacman.game.Constants;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
