@@ -45,4 +45,12 @@ public class NearGhost
         return distance;
     }
 
+    @Override
+    public String toString()
+    {
+        return type + " (" + index + ")" + ": at " + distance;
+    }
+    
+    
+
 }

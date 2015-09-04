@@ -9,10 +9,10 @@ import pacman.game.Game;
  *
  * @author romsahel
  */
-public class ChaseTask extends Leaf
+public class ChasePowerPillTask extends Leaf
 {
 
-    public ChaseTask(MyPacMan parent)
+    public ChasePowerPillTask(MyPacMan parent)
     {
         super(parent);
     }
@@ -21,10 +21,9 @@ public class ChaseTask extends Leaf
     public boolean DoAction(Game game)
     {
         parent.setMove(game.getNextMoveTowardsTarget(
-                parent.getCurrent(),
-                parent.getNearestGhost().getIndex(),
-                Constants.DM.PATH)
-        );
+                parent.current, 
+                parent.getNearestPowerPill(), 
+                Constants.DM.PATH));
         return true;
     }
 

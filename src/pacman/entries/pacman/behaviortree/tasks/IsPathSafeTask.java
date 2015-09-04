@@ -9,10 +9,10 @@ import pacman.game.Game;
  *
  * @author romsahel
  */
-public class RunAwayTask extends Leaf
+public class IsPathSafeTask extends Leaf
 {
 
-    public RunAwayTask(MyPacMan parent)
+    public IsPathSafeTask(MyPacMan parent)
     {
         super(parent);
     }
@@ -20,20 +20,16 @@ public class RunAwayTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
-        final int current = parent.current;
         final int nearestPowerPill = parent.getNearestPowerPill();
-
-        parent.setMove(game.getNextMoveAwayFromTarget(current, parent.getNearestGhost().getIndex(), Constants.DM.PATH));
         if (nearestPowerPill == -1)
-            return true;
+            return false;
         
-        for (int node : game.getShortestPath(current, nearestPowerPill))
+        for (int node : game.getShortestPath(parent.current, nearestPowerPill))
         {
             if (game.getDistance(node, parent.getNearestGhost().getIndex(), Constants.DM.PATH) < 2)
-                return true;
-
+                return false;
         }
-        parent.setMove(game.getNextMoveTowardsTarget(current, nearestPowerPill, Constants.DM.PATH));
+
         return true;
     }
 

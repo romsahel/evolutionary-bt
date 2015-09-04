@@ -9,12 +9,31 @@ import pacman.game.Game;
 public class Sequence extends Composite
 {
 
+    public Sequence(int depth)
+    {
+        super(depth);
+    }
+
+    public Sequence()
+    {
+    }
+
     @Override
     public boolean DoAction(Game game)
     {
+        boolean isComposite;
         for (Task child : children)
         {
-            if (!child.DoAction(game))
+            isComposite = child instanceof Composite;
+            if (isComposite)
+                System.out.println(prefix + child.getClass().getSimpleName());
+            
+            final boolean result = child.DoAction(game);
+            
+            if (!isComposite)
+                System.out.println(prefix + child.getClass().getSimpleName() + ": " + result);
+            
+            if (!result)
                 return false;
         }
         return true;
