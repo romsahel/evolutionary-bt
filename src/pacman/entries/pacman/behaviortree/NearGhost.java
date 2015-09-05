@@ -10,11 +10,11 @@ import pacman.game.Game;
 public class NearGhost
 {
 
-    private Constants.GHOST type;
-    private int index;
-    private double distance;
+    private final Constants.GHOST type;
+    private final int index;
+    private final double distance;
 
-    public void update(Game game, Constants.GHOST type, double distance)
+    public NearGhost(Game game, Constants.GHOST type, double distance)
     {
         this.type = type;
         this.index = game.getGhostCurrentNodeIndex(type);

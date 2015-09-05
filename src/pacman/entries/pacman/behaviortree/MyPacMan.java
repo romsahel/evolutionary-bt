@@ -1,5 +1,7 @@
 package pacman.entries.pacman.behaviortree;
 
+import java.util.Comparator;
+import java.util.TreeSet;
 import pacman.controllers.Controller;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
 import pacman.entries.pacman.behaviortree.helpers.Selector;
@@ -18,29 +20,37 @@ public class MyPacMan extends Controller<MOVE>
 {
 
     private final Composite rootNode;
-    private final NearGhost nearestGhost;
+    public final TreeSet<NearGhost> nearestGhosts;
     private int nearestPill, nearestPowerPill;
-    public int current;
+    private int current;
     private MOVE move;
 
+    // possible improvement: keep a list of all ghosts, sorted by distance (instead of keeping only the nearest one)
+    // instead of running away from the nearest, look at all the nearest
+    // and find an exit that would work for all of them
     public MyPacMan()
     {
-        nearestGhost = new NearGhost();
+        nearestGhosts = new TreeSet<>(new Comparator<NearGhost>()
+        {
+
+            @Override
+            public int compare(NearGhost o1, NearGhost o2)
+            {
+                return (int) (o1.getDistance() - o2.getDistance());
+            }
+        });
 
         rootNode = new Sequence();
         rootNode.addChildren(
                 new AnalyzeGameTask(this),
                 new Selector(1).addChildren(
-                        
                         new Sequence(2).addChildren(
                                 new IsGhostNearTask(this),
-                                
                                 new Selector(3).addChildren(
                                         new Sequence(4).addChildren(
                                                 new IsGhostEdibleTask(this),
                                                 new EatPillTask(this)),
                                         new Selector(4).addChildren(
-                                                
                                                 new Sequence(5).addChildren(
                                                         new IsPathSafeTask(this),
                                                         new ChasePowerPillTask(this)
@@ -59,14 +69,6 @@ public class MyPacMan extends Controller<MOVE>
         rootNode.DoAction(game);
         System.out.println("===================");
         return move;
-    }
-
-    /**
-     * @return the nearestGhost
-     */
-    public NearGhost getNearestGhost()
-    {
-        return nearestGhost;
     }
 
     /**
@@ -124,6 +126,21 @@ public class MyPacMan extends Controller<MOVE>
     public void setCurrent(int current)
     {
         this.current = current;
+    }
+
+    /**
+     * @return the nearestGhosts
+     */
+    public NearGhost getNearestGhost()
+    {
+        return (nearestGhosts.size() > 0) ? nearestGhosts.first() : null;
+    }
+    /**
+     * @return the nearestGhosts
+     */
+    public TreeSet<NearGhost> getNearestGhosts()
+    {
+        return nearestGhosts;
     }
 
 }

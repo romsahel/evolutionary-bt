@@ -24,7 +24,7 @@ public class IsPathSafeTask extends Leaf
         if (nearestPowerPill == -1)
             return false;
         
-        for (int node : game.getShortestPath(parent.current, nearestPowerPill))
+        for (int node : game.getShortestPath(parent.getCurrent(), nearestPowerPill))
         {
             if (game.getDistance(node, parent.getNearestGhost().getIndex(), Constants.DM.PATH) < 2)
                 return false;

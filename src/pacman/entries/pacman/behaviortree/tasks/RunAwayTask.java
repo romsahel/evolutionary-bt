@@ -20,7 +20,7 @@ public class RunAwayTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
-        final int current = parent.current;
+        final int current = parent.getCurrent();
         final int nearestPowerPill = parent.getNearestPowerPill();
 
         parent.setMove(game.getNextMoveAwayFromTarget(current, parent.getNearestGhost().getIndex(), Constants.DM.PATH));

@@ -19,7 +19,7 @@ public class IsGhostNearTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
-        return parent.getNearestGhost().getType() != null
+        return parent.getNearestGhost() != null
                 && parent.getNearestGhost().getDistance() < 25;
     }
 }

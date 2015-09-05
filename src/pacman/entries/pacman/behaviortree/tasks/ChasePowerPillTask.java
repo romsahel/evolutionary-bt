@@ -21,7 +21,7 @@ public class ChasePowerPillTask extends Leaf
     public boolean DoAction(Game game)
     {
         parent.setMove(game.getNextMoveTowardsTarget(
-                parent.current, 
+                parent.getCurrent(), 
                 parent.getNearestPowerPill(), 
                 Constants.DM.PATH));
         return true;

@@ -1,6 +1,7 @@
 package pacman.entries.pacman.behaviortree.tasks;
 
 import pacman.entries.pacman.behaviortree.MyPacMan;
+import pacman.entries.pacman.behaviortree.NearGhost;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.game.Constants;
 import pacman.game.Game;
@@ -43,8 +44,7 @@ public class AnalyzeGameTask extends Leaf
 
     private void getNearestGhost(Game game)
     {
-        double minimum = Integer.MAX_VALUE;
-        Constants.GHOST nearestGhostType = null;
+        parent.getNearestGhosts().clear();
         for (Constants.GHOST ghost : Constants.GHOST.values())
             if (game.getGhostLairTime(ghost) < 1)
             {
@@ -53,13 +53,7 @@ public class AnalyzeGameTask extends Leaf
                         game.getGhostCurrentNodeIndex(ghost),
                         Constants.DM.PATH
                 );
-                if (shortest < minimum)
-                {
-                    nearestGhostType = ghost;
-                    minimum = shortest;
-                }
+                parent.getNearestGhosts().add(new NearGhost(game, ghost, shortest));
             }
-        if (nearestGhostType != null)
-            parent.getNearestGhost().update(game, nearestGhostType, minimum);
     }
 }
