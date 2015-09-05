@@ -25,7 +25,6 @@ public class MyPacMan extends Controller<MOVE>
     private int current;
     private MOVE move;
 
-    // possible improvement: keep a list of all ghosts, sorted by distance (instead of keeping only the nearest one)
     // instead of running away from the nearest, look at all the nearest
     // and find an exit that would work for all of them
     public MyPacMan()

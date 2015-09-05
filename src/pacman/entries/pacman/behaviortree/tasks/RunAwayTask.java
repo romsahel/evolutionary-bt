@@ -21,19 +21,7 @@ public class RunAwayTask extends Leaf
     public boolean DoAction(Game game)
     {
         final int current = parent.getCurrent();
-        final int nearestPowerPill = parent.getNearestPowerPill();
-
         parent.setMove(game.getNextMoveAwayFromTarget(current, parent.getNearestGhost().getIndex(), Constants.DM.PATH));
-        if (nearestPowerPill == -1)
-            return true;
-        
-        for (int node : game.getShortestPath(current, nearestPowerPill))
-        {
-            if (game.getDistance(node, parent.getNearestGhost().getIndex(), Constants.DM.PATH) < 2)
-                return true;
-
-        }
-        parent.setMove(game.getNextMoveTowardsTarget(current, nearestPowerPill, Constants.DM.PATH));
         return true;
     }
 
