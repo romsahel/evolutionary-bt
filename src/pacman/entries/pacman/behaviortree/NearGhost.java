@@ -4,7 +4,9 @@ import pacman.game.Constants;
 import pacman.game.Game;
 
 /**
- *
+ * Represents a ghost with required information:
+ * its type, its position and the distance to the player.
+ * 
  * @author romsahel
  */
 public class NearGhost

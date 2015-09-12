@@ -6,7 +6,7 @@ import pacman.game.Constants;
 import pacman.game.Game;
 
 /**
- *
+ * Action task: sets the next move to chase the nearest ghost
  * @author romsahel
  */
 public class ChaseTask extends Leaf

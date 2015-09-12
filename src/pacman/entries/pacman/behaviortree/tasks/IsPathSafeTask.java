@@ -6,7 +6,9 @@ import pacman.game.Constants;
 import pacman.game.Game;
 
 /**
- *
+ * A condition task: returns true if the path from current position 
+ * to the nearest powerpill is safe.
+ * 
  * @author romsahel
  */
 public class IsPathSafeTask extends Leaf

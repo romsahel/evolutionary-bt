@@ -7,7 +7,8 @@ import pacman.game.Constants;
 import pacman.game.Game;
 
 /**
- *
+ * Analyze the game state to update necessary informations such as 
+ * nearest pills positions and ghosts.
  * @author romsahel
  */
 public class AnalyzeGameTask extends Leaf
@@ -21,17 +22,17 @@ public class AnalyzeGameTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
-        getNearestGhost(game);
+        updateNearestGhosts(game);
         int current = game.getPacmanCurrentNodeIndex();
         int[] pills = game.getActivePillsIndices();
         int[] powerPills = game.getActivePowerPillsIndices();
 
+        // merge the pills and powerpills indexes into one array to find 
+        // the nearest one
         int[] availablePills = new int[pills.length + powerPills.length];
         System.arraycopy(pills, 0, availablePills, 0, pills.length);
         System.arraycopy(powerPills, 0, availablePills, pills.length, powerPills.length);
 
-        parent.setCurrent(current);
-        
         parent.setNearestPill(game.getClosestNodeIndexFromNodeIndex(current,
                 availablePills,
                 Constants.DM.PATH));
@@ -39,10 +40,17 @@ public class AnalyzeGameTask extends Leaf
         parent.setNearestPowerPill(game, game.getClosestNodeIndexFromNodeIndex(current,
                 powerPills,
                 Constants.DM.PATH));
+
+        parent.setCurrent(current);
+        
         return true;
     }
 
-    private void getNearestGhost(Game game)
+    /**
+     * Update the sorted list of enabled ghosts (excludes ghosts in the lair)
+     * @param game
+     */
+    private void updateNearestGhosts(Game game)
     {
         parent.getNearestGhosts().clear();
         for (Constants.GHOST ghost : Constants.GHOST.values())

@@ -6,7 +6,7 @@ import pacman.game.Constants;
 import pacman.game.Game;
 
 /**
- *
+ * Action task: sets the next move to get away from the nearest ghost
  * @author romsahel
  */
 public class RunAwayTask extends Leaf

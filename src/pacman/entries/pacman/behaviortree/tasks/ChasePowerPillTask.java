@@ -6,7 +6,7 @@ import pacman.game.Constants;
 import pacman.game.Game;
 
 /**
- *
+ * Action task: sets the next move to go to the nearest powerpill
  * @author romsahel
  */
 public class ChasePowerPillTask extends Leaf

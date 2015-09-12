@@ -6,7 +6,7 @@ import pacman.game.Constants;
 import pacman.game.Game;
 
 /**
- *
+ * Action task: sets the next move to go eat the nearest pill
  * @author romsahel
  */
 public class EatPillTask extends Leaf

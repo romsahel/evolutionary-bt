@@ -6,7 +6,7 @@ import pacman.entries.pacman.behaviortree.MyPacMan;
  *
  * @author romsahel
  */
-public abstract class Leaf extends Task
+public abstract class Leaf extends Node
 {
     protected final MyPacMan parent;
 

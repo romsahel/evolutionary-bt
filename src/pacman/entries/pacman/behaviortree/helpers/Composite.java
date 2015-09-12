@@ -4,13 +4,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- *
+ * Represents a composite node, ie a node with multiple children 
+ * such as Selectors and Sequences.
+ * 
  * @author romsahel
  */
-public abstract class Composite extends Task
+public abstract class Composite extends Node
 {
-
-    ArrayList<Task> children = new ArrayList<>();
+	/**
+	 * DEBUG constant can be used to output in the console 
+	 * the path taken within the tree.
+	 */
+	public static final boolean DEBUG = false;
+	/**
+	 * The list of children nodes (subnodes) 
+	 */
+	ArrayList<Node> children = new ArrayList<>();
+	/**
+	 * Used to indent the debug output
+	 */
     String prefix;
 
     public Composite()
@@ -18,6 +30,11 @@ public abstract class Composite extends Task
         this.prefix = "";
     }
 
+    /**
+     * This constructor allows to give the depth of the node in the tree,
+     * which allows a cleaner and indented debug output
+     * @param depth the depth of the node in the tree.
+     */
     public Composite(int depth)
     {
         StringBuilder builder = new StringBuilder(depth);
@@ -26,9 +43,14 @@ public abstract class Composite extends Task
         this.prefix = builder.toString();
     }
 
-    public Composite addChildren(Task... tasks)
+    /**
+     * Add children to the list
+     * @param nodes children of the current node
+     * @return this object, allows for method chaining
+     */
+    public Composite addChildren(Node... nodes)
     {
-        children.addAll(Arrays.asList(tasks));
+        children.addAll(Arrays.asList(nodes));
         return this;
     }
 }

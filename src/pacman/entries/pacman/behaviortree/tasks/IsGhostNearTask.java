@@ -5,21 +5,27 @@ import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.game.Game;
 
 /**
- *
+ * A condition task: returns true if a ghost is within 
+ * the specified distance
  * @author romsahel
  */
 public class IsGhostNearTask extends Leaf
 {
 
-    public IsGhostNearTask(MyPacMan parent)
+    public static final int RUN_DISTANCE = 25;
+    public static final int CHASE_DISTANCE = 20;
+	private int distance;
+
+	public IsGhostNearTask(MyPacMan parent, int distance)
     {
         super(parent);
+		this.distance = distance;
     }
 
     @Override
     public boolean DoAction(Game game)
     {
         return parent.getNearestGhost() != null
-                && parent.getNearestGhost().getDistance() < 25;
+                && parent.getNearestGhost().getDistance() < distance;
     }
 }
