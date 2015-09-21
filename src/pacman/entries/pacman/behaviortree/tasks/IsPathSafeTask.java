@@ -22,13 +22,13 @@ public class IsPathSafeTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
-        final int nearestPowerPill = parent.getNearestPowerPill();
+        final int nearestPowerPill = state.getNearestPowerPill();
         if (nearestPowerPill == -1)
             return false;
         
-        for (int node : game.getShortestPath(parent.getCurrent(), nearestPowerPill))
+        for (int node : game.getShortestPath(state.getCurrent(), nearestPowerPill))
         {
-            if (game.getDistance(node, parent.getNearestGhost().getIndex(), Constants.DM.PATH) < 2)
+            if (game.getDistance(node, state.getNearestGhost().getIndex(), Constants.DM.PATH) < 2)
                 return false;
         }
 

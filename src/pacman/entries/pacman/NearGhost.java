@@ -1,4 +1,4 @@
-package pacman.entries.pacman.behaviortree;
+package pacman.entries.pacman;
 
 import pacman.game.Constants;
 import pacman.game.Game;

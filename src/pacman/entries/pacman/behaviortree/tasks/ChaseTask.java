@@ -21,8 +21,8 @@ public class ChaseTask extends Leaf
     public boolean DoAction(Game game)
     {
         parent.setMove(game.getNextMoveTowardsTarget(
-                parent.getCurrent(),
-                parent.getNearestGhost().getIndex(),
+                state.getCurrent(),
+                state.getNearestGhost().getIndex(),
                 Constants.DM.PATH)
         );
         return true;

@@ -19,7 +19,7 @@ public class IsGhostEdibleTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
-        final int edibleTime = game.getGhostEdibleTime(parent.getNearestGhost().getType());
+        final int edibleTime = game.getGhostEdibleTime(state.getNearestGhost().getType());
         return (edibleTime > 1);
     }
 

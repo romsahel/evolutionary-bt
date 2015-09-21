@@ -37,6 +37,8 @@ public abstract class Composite extends Node
      */
     public Composite(int depth)
     {
+    	if (!DEBUG)
+    		return;
         StringBuilder builder = new StringBuilder(depth);
         for (int i = 0; i < depth; i++)
             builder.append('\t');

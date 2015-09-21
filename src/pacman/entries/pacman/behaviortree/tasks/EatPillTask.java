@@ -21,8 +21,8 @@ public class EatPillTask extends Leaf
     public boolean DoAction(Game game)
     {
         parent.setMove(game.getNextMoveTowardsTarget(
-                parent.getCurrent(),
-                parent.getNearestPill(),
+                state.getCurrent(),
+                state.getNearestPill(),
                 Constants.DM.PATH)
         );
         return true;

@@ -1,11 +1,12 @@
-package pacman.entries.pacman.ga;
+package pacman.entries.pacman.genetic.mlp;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Perceptron
 {
-	private static final Random rand = new Random();
-	private static final int NB_INPUT = 6;
+	public static final int NB_NEARGHOST_INPUT = 3;
+	private static final int NB_INPUT = NB_NEARGHOST_INPUT * 2 + 2;
 	private static final int NB_LAYERS = 2;
 	private static final int NB_HIDDEN = 7;
 	private static final int NB_OUTPUT = 1;
@@ -14,14 +15,16 @@ public class Perceptron
 	private static final int NB_TOTAL_HIDDEN_WEIGHTS = NB_HIDDEN * NB_HIDDEN * (NB_LAYERS - 1);
 	private static final int NB_OUTPUT_WEIGHTS = NB_HIDDEN * NB_OUTPUT;
 
-	float[] inputNeurons;
+	private static final Random rand = new Random();
+
+	Integer[] inputNeurons;
 	float[] hiddenNeurons;
 	float[] outputNeurons;
 	float[] weights;
 
 	public Perceptron()
 	{
-		inputNeurons = new float[NB_INPUT];
+		inputNeurons = new Integer[NB_INPUT];
 		hiddenNeurons = new float[NB_LAYERS * NB_HIDDEN];
 		outputNeurons = new float[NB_OUTPUT];
 		weights = new float[NB_INPUT_WEIGHTS + NB_TOTAL_HIDDEN_WEIGHTS + NB_OUTPUT_WEIGHTS];
@@ -41,8 +44,10 @@ public class Perceptron
 			weights[i] = rand.nextFloat() - 0.5f;
 	}
 
-	public float[] getOutput()
+	public float[] getOutput(ArrayList<Integer> inputs)
 	{
+		inputNeurons = inputs.toArray(inputNeurons);
+		
 		propagateFromInputToHidden();
 		propagateToHiddenLayers();
 		propagateToOutput();
