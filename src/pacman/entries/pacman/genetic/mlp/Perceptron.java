@@ -21,9 +21,9 @@ public class Perceptron
 	protected ArrayList<Integer> inputNeurons;
 	protected final float[] hiddenNeurons;
 	protected final float[] outputNeurons;
-	protected final float[] weights;
+	private final float[] weights;
 
-	private Perceptron(float[] weights)
+	public Perceptron(float[] weights)
 	{
 		inputNeurons = new ArrayList<>(NB_INPUT);
 		hiddenNeurons = new float[NB_LAYERS * NB_HIDDEN];
@@ -51,7 +51,7 @@ public class Perceptron
 	{
 		this(perceptron.weights);
 	}
-	
+
 	public Perceptron()
 	{
 		this((float[]) null);
@@ -70,7 +70,6 @@ public class Perceptron
 		for (int k = 0; k < NB_OUTPUT_WEIGHTS; k++, i++)
 			weights[i] = rand.nextFloat() - 0.5f;
 	}
-
 
 	public float[] getOutput(ArrayList<Integer> inputs)
 	{
@@ -207,4 +206,8 @@ public class Perceptron
 		return (float) Math.tanh(value);
 	}
 
+	public float[] getWeights()
+	{
+		return weights;
+	}
 }

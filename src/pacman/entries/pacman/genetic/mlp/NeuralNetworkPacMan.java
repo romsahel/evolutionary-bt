@@ -23,6 +23,12 @@ public class NeuralNetworkPacMan extends Controller<MOVE>implements Comparable<N
 		state = new GameState();
 	}
 
+	public NeuralNetworkPacMan(Perceptron perceptron)
+	{
+		this.perceptron = perceptron;
+		state = new GameState();
+	}
+
 	public NeuralNetworkPacMan(NeuralNetworkPacMan parent1, NeuralNetworkPacMan parent2)
 	{
 		perceptron = new Perceptron(parent1.getPerceptron(), parent2.getPerceptron());
