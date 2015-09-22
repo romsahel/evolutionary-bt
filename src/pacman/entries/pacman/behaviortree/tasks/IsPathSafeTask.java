@@ -1,9 +1,12 @@
 package pacman.entries.pacman.behaviortree.tasks;
 
+import java.awt.Color;
+
 import pacman.entries.pacman.behaviortree.MyPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.game.Constants;
 import pacman.game.Game;
+import pacman.game.GameView;
 
 /**
  * A condition task: returns true if the path from current position 
@@ -31,6 +34,9 @@ public class IsPathSafeTask extends Leaf
             if (game.getDistance(node, state.getNearestGhost().getIndex(), Constants.DM.PATH) < 2)
                 return false;
         }
+
+        GameView.addPoints(game, Color.RED, game.getShortestPath(state.getCurrent(), nearestPowerPill));
+
 
         return true;
     }

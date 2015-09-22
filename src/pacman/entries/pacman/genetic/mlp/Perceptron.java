@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Perceptron
 {
-	public static final int NB_NEARGHOST_INPUT = 3;
+	public static final int NB_NEARGHOST_INPUT = 2;
 	private static final int NB_INPUT = NB_NEARGHOST_INPUT * 2 + 2;
 	private static final int NB_LAYERS = 2;
 	private static final int NB_HIDDEN = 7;
@@ -14,20 +14,47 @@ public class Perceptron
 	private static final int NB_HIDDEN_WEIGHTS = NB_HIDDEN * NB_HIDDEN;
 	private static final int NB_TOTAL_HIDDEN_WEIGHTS = NB_HIDDEN * NB_HIDDEN * (NB_LAYERS - 1);
 	private static final int NB_OUTPUT_WEIGHTS = NB_HIDDEN * NB_OUTPUT;
+	protected static final int NB_TOTAL_WEIGHTS = NB_INPUT_WEIGHTS + NB_TOTAL_HIDDEN_WEIGHTS + NB_OUTPUT_WEIGHTS;
 
 	private static final Random rand = new Random();
 
-	Integer[] inputNeurons;
-	float[] hiddenNeurons;
-	float[] outputNeurons;
-	float[] weights;
+	protected ArrayList<Integer> inputNeurons;
+	protected final float[] hiddenNeurons;
+	protected final float[] outputNeurons;
+	protected final float[] weights;
 
-	public Perceptron()
+	private Perceptron(float[] weights)
 	{
-		inputNeurons = new Integer[NB_INPUT];
+		inputNeurons = new ArrayList<>(NB_INPUT);
 		hiddenNeurons = new float[NB_LAYERS * NB_HIDDEN];
 		outputNeurons = new float[NB_OUTPUT];
-		weights = new float[NB_INPUT_WEIGHTS + NB_TOTAL_HIDDEN_WEIGHTS + NB_OUTPUT_WEIGHTS];
+		if (weights == null)
+			this.weights = new float[Perceptron.NB_TOTAL_WEIGHTS];
+		else
+			this.weights = weights;
+	}
+
+	public Perceptron(Perceptron parent1, Perceptron parent2)
+	{
+		this((float[]) null);
+
+		for (int i = 0; i < Perceptron.NB_TOTAL_WEIGHTS; i++)
+		{
+			if (rand.nextBoolean())
+				weights[i] = parent1.weights[i];
+			else
+				weights[i] = parent2.weights[i];
+		}
+	}
+
+	public Perceptron(Perceptron perceptron)
+	{
+		this(perceptron.weights);
+	}
+	
+	public Perceptron()
+	{
+		this((float[]) null);
 
 		int i = 0;
 		// randomize weights for input to hidden layer
@@ -44,10 +71,11 @@ public class Perceptron
 			weights[i] = rand.nextFloat() - 0.5f;
 	}
 
+
 	public float[] getOutput(ArrayList<Integer> inputs)
 	{
-		inputNeurons = inputs.toArray(inputNeurons);
-		
+		this.inputNeurons = inputs;
+
 		propagateFromInputToHidden();
 		propagateToHiddenLayers();
 		propagateToOutput();
@@ -67,7 +95,7 @@ public class Perceptron
 		{
 			float value = 0;
 			for (int input = 0; input < NB_INPUT; input++)
-				value += inputNeurons[input] * inputToHidden(input, n);
+				value += inputNeurons.get(input) * inputToHidden(input, n);
 
 			hiddenNeurons[getHiddenIndex(1, n)] = sigmoid(value);
 		}
@@ -81,10 +109,10 @@ public class Perceptron
 	{
 		for (int i = 2; i <= NB_LAYERS; i++)
 		{
-			for (int j = 0; j < NB_HIDDEN; j++)// to
+			for (int j = 0; j < NB_HIDDEN; j++)
 			{
 				float value = 0;
-				for (int k = 0; k < NB_HIDDEN; k++)// from
+				for (int k = 0; k < NB_HIDDEN; k++)
 					value += hiddenNeurons[getHiddenIndex(i - 1, k)] * hiddenToHidden(i, k, j);
 
 				hiddenNeurons[getHiddenIndex(i, j)] = sigmoid(value);
@@ -172,7 +200,11 @@ public class Perceptron
 	 */
 	private float sigmoid(float value)
 	{
-		return (float) (1 / 1 + Math.exp(-value));
+		if (Float.isNaN(value))
+			System.out.println("value is NaN");
+		// double d = 1 / 1 + Math.exp(-value);
+		// float f = (float) d;
+		return (float) Math.tanh(value);
 	}
 
 }

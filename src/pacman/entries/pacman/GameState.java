@@ -63,7 +63,6 @@ public class GameState
 		setNearestPowerPill(game, game.getClosestNodeIndexFromNodeIndex(current,
 		        powerPills,
 		        Constants.DM.PATH));
-
 	}
 
 	/**
