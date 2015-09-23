@@ -21,8 +21,8 @@ import pacman.game.Game;
 
 public class MLPTrainer
 {
-	private static final int ITERATIONS = 150;
-	private static final int POPULATION = 100;
+	private static final int ITERATIONS = 5;
+	private static final int POPULATION = 60;
 	// private static final int DEATH_RATE = POPULATION / 4;
 	private static final int TRIALS = 12;
 
@@ -34,13 +34,10 @@ public class MLPTrainer
 	{
 		population = new TreeSet<>();
 
+		deserializePopulation();
 		System.out.println("Creating population...");
 		while (population.size() < POPULATION)
-		{
 			experimentAndAddPacMan(new NeuralNetworkPacMan());
-			System.out.print(population.size() + " ");
-		}
-		System.out.println();
 
 		for (int i = 0; i < ITERATIONS; i++)
 		{
@@ -50,10 +47,8 @@ public class MLPTrainer
 			        + (population.first().getScore() / TRIALS));
 		}
 
+		serializePopulation();
 		bestPacMan = population.first();
-
-		System.out.println((population.first().getScore() / TRIALS));
-
 	}
 
 	public TreeSet<NeuralNetworkPacMan> processInputs(TreeSet<NeuralNetworkPacMan> inputs)
@@ -130,7 +125,6 @@ public class MLPTrainer
 		pacman.setScore(avgScore);
 	}
 
-	@SuppressWarnings("unused")
 	private void serializePopulation()
 	{
 		FileOutputStream fos;
@@ -150,7 +144,6 @@ public class MLPTrainer
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private void deserializePopulation()
 	{
 		population = new TreeSet<>();

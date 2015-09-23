@@ -8,7 +8,7 @@ public class Perceptron
 	public static final int NB_NEARGHOST_INPUT = 2;
 	private static final int NB_INPUT = NB_NEARGHOST_INPUT * 2 + 2;
 	private static final int NB_LAYERS = 2;
-	private static final int NB_HIDDEN = 7;
+	private static final int NB_HIDDEN = NB_INPUT * 4;
 	private static final int NB_OUTPUT = 1;
 	private static final int NB_INPUT_WEIGHTS = NB_INPUT * NB_HIDDEN;
 	private static final int NB_HIDDEN_WEIGHTS = NB_HIDDEN * NB_HIDDEN;
@@ -44,6 +44,10 @@ public class Perceptron
 				weights[i] = parent1.weights[i];
 			else
 				weights[i] = parent2.weights[i];
+
+			// 10% chances of mutation
+			if (rand.nextFloat() * 100 < 10)
+				weights[i] = (rand.nextFloat() / 2) - (0.5f / 2);
 		}
 	}
 
@@ -166,11 +170,6 @@ public class Perceptron
 	/**
 	 * Helper function to get the weigh value of the synapse connecting two
 	 * hidden neurons
-	 * 
-	 * @param layerIndex
-	 * @param startIndex
-	 * @param endIndex
-	 * @return
 	 */
 	private float hiddenToHidden(int layerIndex, int startIndex, int endIndex)
 	{
@@ -181,10 +180,6 @@ public class Perceptron
 	/**
 	 * Helper function to get the weight value of the synapse of a neuron from
 	 * the last hidden layer to the neuron of the output layer
-	 * 
-	 * @param hiddenIndex
-	 * @param outputIndex
-	 * @return
 	 */
 	private float hiddenToOutput(int hiddenIndex, int outputIndex)
 	{
@@ -193,9 +188,6 @@ public class Perceptron
 
 	/**
 	 * Activation function, to normalize the output values
-	 * 
-	 * @param value
-	 * @return
 	 */
 	private float sigmoid(float value)
 	{
