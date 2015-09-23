@@ -15,7 +15,6 @@ import java.util.Random;
 
 import pacman.controllers.Controller;
 import pacman.controllers.HumanController;
-import pacman.controllers.examples.StarterGhosts;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
@@ -55,11 +54,11 @@ public class Executor
 		///*
 		//run the game in asynchronous mode.
 		boolean visual=true;
-//		exec.runGameTimed(new NearestPillPacMan(),new AggressiveGhosts(),visual);
 //		exec.runGameTimed(new pacman.entries.pacman.behaviortree.MyPacMan(),new StarterGhosts(),visual);
-		exec.runGameTimed(new pacman.entries.pacman.genetic.MyPacMan(),new StarterGhosts(),visual);
-//		exec.runGameTimed(new HumanController(new KeyBoardInput()),new StarterGhosts(),visual);	
+//		exec.runGameTimed(new pacman.entries.pacman.genetic.MyPacMan(),new StarterGhosts(),visual);
 		//*/
+
+//		exec.runExperiment(new pacman.entries.pacman.behaviortree.MyPacMan(), new StarterGhosts(), 500);
 		
 		/*
 		//run the game in asynchronous mode but advance as soon as both controllers are ready  - this is the mode of the competition.
@@ -94,6 +93,7 @@ public class Executor
     	
     	Random rnd=new Random(0);
 		Game game;
+		double max = 0, min = -1;
 		
 		for(int i=0;i<trials;i++)
 		{
@@ -107,9 +107,13 @@ public class Executor
 			
 			avgScore+=game.getScore();
 			System.out.println(i+"\t"+game.getScore());
+			max = (game.getScore() > max) ? game.getScore() : max;
+			min = (game.getScore() < min || min == -1) ? game.getScore() : min;
 		}
-		
-		System.out.println(avgScore/trials);
+
+		System.out.println("Average score: " + avgScore/trials);
+		System.out.println("Maximum score: " + max);
+		System.out.println("Minimum score: " + min);
     }
 	
 	/**
