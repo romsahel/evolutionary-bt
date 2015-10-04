@@ -11,7 +11,7 @@ public class GameState
 	/*
 	 * List of all the ghosts sorted by distance
 	 */
-	public final TreeSet<NearGhost> nearestGhosts;
+	private final TreeSet<NearGhost> nearestGhosts;
 
 	/*
 	 * The indexes of the nearest pill and power pill
@@ -38,12 +38,7 @@ public class GameState
 
 	public void update(Game game)
 	{
-		update(game, game.getPacmanCurrentNodeIndex());
-	}
-
-	public void update(Game game, int current)
-	{
-		setCurrent(current);
+		setCurrent(game.getPacmanCurrentNodeIndex());
 
 		updateNearestGhosts(game);
 
@@ -70,7 +65,7 @@ public class GameState
 	 * 
 	 * @param game
 	 */
-	private void updateNearestGhosts(Game game)
+	public void updateNearestGhosts(Game game)
 	{
 		getNearestGhosts().clear();
 		for (Constants.GHOST ghost : Constants.GHOST.values())

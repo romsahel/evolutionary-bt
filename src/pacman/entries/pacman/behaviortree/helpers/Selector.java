@@ -26,19 +26,9 @@ public class Selector extends Composite
 		boolean isComposite = false;
 		for (Node child : children)
 		{
-			if (DEBUG)
-			{
-				isComposite = child instanceof Composite;
-				if (isComposite)
-					System.out.println(prefix + child.getClass().getSimpleName());
-			}
+			printDebug(child, true);
 			final boolean result = child.DoAction(game);
-
-			if (DEBUG)
-			{
-				if (!isComposite)
-					System.out.println(prefix + child.getClass().getSimpleName() + ": " + result);
-			}
+			printDebug(child, false);
 
 			if (result)
 				return true;

@@ -24,23 +24,11 @@ public class Sequence extends Composite
 	@Override
 	public boolean DoAction(Game game)
 	{
-		boolean isComposite = false;
 		for (Node child : children)
 		{
-			if (DEBUG)
-			{
-				isComposite = child instanceof Composite;
-				if (isComposite)
-					System.out.println(prefix + child.getClass().getSimpleName());
-			}
-			
-			final boolean result = child.DoAction(game);
-
-			if (DEBUG)
-			{
-				if (!isComposite)
-					System.out.println(prefix + child.getClass().getSimpleName() + ": " + result);
-			}
+				printDebug(child, true);
+				final boolean result = child.DoAction(game);
+				printDebug(child, false);
 
 			if (!result)
 				return false;

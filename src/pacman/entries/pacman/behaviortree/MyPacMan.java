@@ -6,11 +6,13 @@ import pacman.entries.pacman.behaviortree.helpers.Composite;
 import pacman.entries.pacman.behaviortree.helpers.Selector;
 import pacman.entries.pacman.behaviortree.helpers.Sequence;
 import pacman.entries.pacman.behaviortree.tasks.ChasePowerPillTask;
+import pacman.entries.pacman.behaviortree.tasks.ChaseTask;
 import pacman.entries.pacman.behaviortree.tasks.EatPillTask;
 import pacman.entries.pacman.behaviortree.tasks.IsGhostEdibleTask;
 import pacman.entries.pacman.behaviortree.tasks.IsGhostNearTask;
 import pacman.entries.pacman.behaviortree.tasks.IsPathSafeTask;
 import pacman.entries.pacman.behaviortree.tasks.RunAwayTask;
+import pacman.entries.pacman.behaviortree.tasks.isGhostCloserTask;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
@@ -36,11 +38,15 @@ public class MyPacMan extends Controller<MOVE>
 		rootNode = new Selector();
 		rootNode.addChildren(
 		        new Sequence(1).addChildren(
-		                new IsGhostNearTask(this, IsGhostNearTask.RUN_DISTANCE),
+		                new IsGhostNearTask(this),
 		                new Selector(2).addChildren(
 		                        new Sequence(3).addChildren(
 		                                new IsGhostEdibleTask(this),
-		                                new EatPillTask(this)),
+		                                new Selector(4).addChildren(
+		                                        new Sequence(5).addChildren(
+		                                                new isGhostCloserTask(this),
+		                                                new ChaseTask(this)),
+		                                        new EatPillTask(this))),
 		                        new Selector(3).addChildren(
 		                                new Sequence(4).addChildren(
 		                                        new IsPathSafeTask(this),

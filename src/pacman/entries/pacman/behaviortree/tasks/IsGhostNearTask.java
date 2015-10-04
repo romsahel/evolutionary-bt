@@ -12,20 +12,17 @@ import pacman.game.Game;
 public class IsGhostNearTask extends Leaf
 {
 
-    public static final int RUN_DISTANCE = 25;
-    public static final int CHASE_DISTANCE = 20;
-	private int distance;
+    public static int RUN_DISTANCE = 20;
 
-	public IsGhostNearTask(MyPacMan parent, int distance)
+	public IsGhostNearTask(MyPacMan parent)
     {
         super(parent);
-		this.distance = distance;
     }
 
     @Override
     public boolean DoAction(Game game)
     {
         return state.getNearestGhost() != null
-                && state.getNearestGhost().getDistance() < distance;
+                && state.getNearestGhost().getDistance() < RUN_DISTANCE;
     }
 }

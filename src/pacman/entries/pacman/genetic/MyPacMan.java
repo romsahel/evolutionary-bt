@@ -9,9 +9,11 @@ public class MyPacMan extends Controller<MOVE>
 {
 	private final MLPTrainer trainer;
 
-	public MyPacMan()
+	public MyPacMan(boolean train)
 	{
-		trainer = new MLPTrainer();
+		System.out.println("Training: beginning...");
+		trainer = new MLPTrainer(train);
+		System.out.println("Training: ended.");
 	}
 
 	@Override
