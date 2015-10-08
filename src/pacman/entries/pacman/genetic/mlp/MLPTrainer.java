@@ -48,6 +48,7 @@ public class MLPTrainer
 
 //				System.out.println("It " + i + ": population size = " + population.size() + " -- best: "
 //				        + (population.first().getScore() / TRIALS));
+				System.out.println(Double.toString((population.first().getScore() / TRIALS)).replace(".", ","));
 			}
 			serializePopulation();
 		}

@@ -5,6 +5,7 @@ import java.util.Random;
 
 import pacman.controllers.Controller;
 import pacman.controllers.examples.StarterGhosts;
+import pacman.entries.pacman.GameState;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
@@ -13,6 +14,7 @@ public class MyPacMan extends Controller<MOVE>
 {
 	private static final Random random = new Random();
 	private final Controller<EnumMap<GHOST, MOVE>> ghosts = new StarterGhosts();
+	private static final GameState state = new GameState();
 
 	public MyPacMan()
 	{
@@ -48,7 +50,8 @@ public class MyPacMan extends Controller<MOVE>
 		// this allows to reduce the depth of the tree
 		while (!node.getGame().gameOver()
 		        && livesRemaining == node.getGame().getPacmanNumberOfLivesRemaining()
-		        && currentLevel == node.getGame().getCurrentLevel())
+		        && currentLevel == node.getGame().getCurrentLevel()
+		        && node.depth < 20)
 		{
 			if (!isFullyExpanded(node))
 				return expand(node);
@@ -74,10 +77,10 @@ public class MyPacMan extends Controller<MOVE>
 		while (!game.gameOver())
 		{
 			int livesRemaining = game.getPacmanNumberOfLivesRemaining();
-			EnumMap<GHOST, MOVE> ghostMove = ghosts.getMove(game, System.currentTimeMillis() + 2);
-			MOVE[] moves = game.getPossibleMoves(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade());
+			EnumMap<GHOST, MOVE> ghostMove = ghosts.getMove(game, System.currentTimeMillis() + 1);
+			MOVE[] moves = getPossibleMoves(game);
 			MOVE pacManMove = moves[random.nextInt(moves.length)];
-
+			
 			game.advanceGame(pacManMove, ghostMove);
 
 			// interrupt playout if a life is lost
@@ -120,9 +123,7 @@ public class MyPacMan extends Controller<MOVE>
 	{
 		Game game = node.getGameCopy();
 
-		int current = game.getPacmanCurrentNodeIndex();
-		MOVE lastMove = game.getPacmanLastMoveMade();
-		MOVE[] possibleMoves = game.getPossibleMoves(current, lastMove);
+		MOVE[] possibleMoves = getPossibleMoves(game);
 
 		int index = random.nextInt(possibleMoves.length);
 		while (moveAlreadyTried(node, possibleMoves[index]))
@@ -130,8 +131,8 @@ public class MyPacMan extends Controller<MOVE>
 
 		do
 		{
-			game.advanceGame(possibleMoves[index], ghosts.getMove(game, System.currentTimeMillis() + 2));
-		} while (!game.isJunction(game.getPacmanCurrentNodeIndex()));
+			game.advanceGame(possibleMoves[index], ghosts.getMove(game, System.currentTimeMillis() + 1));
+		} while (!game.isJunction(game.getPacmanCurrentNodeIndex()) && !game.gameOver());
 
 		Node child = new Node(game, node, possibleMoves[index]);
 
@@ -165,7 +166,13 @@ public class MyPacMan extends Controller<MOVE>
 	 */
 	private boolean isFullyExpanded(Node node)
 	{
-		return node.getGame().getPossibleMoves(node.getGame().getPacmanCurrentNodeIndex(),
-		        node.getGame().getPacmanLastMoveMade()).length == node.getChildren().size();
+		return getPossibleMoves(node.getGame()).length == node.getChildren().size();
+	}
+
+	private MOVE[] getPossibleMoves(Game game)
+	{
+		int current = game.getPacmanCurrentNodeIndex();
+		MOVE lastMove = game.getPacmanLastMoveMade();
+		return game.getPossibleMoves(current, lastMove);
 	}
 }

@@ -12,15 +12,16 @@ import pacman.game.Game;
  */
 public class Node
 {
-	private static final double C = 2;
+	private static final double C = 100;
 
 	private final Node parent;
 	private final ArrayList<Node> children;
 	private final MOVE move;
 	private final Game game;
-
+	
 	private int visits;
 	private double score;
+	public int depth;
 
 	public Node(Game state)
 	{
@@ -37,6 +38,7 @@ public class Node
 		this.game = state;
 		this.parent = parent;
 		this.move = move;
+		this.depth = (this.parent == null) ? 0 : parent.depth + 1;
 	}
 
 	public void visit()
