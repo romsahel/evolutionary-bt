@@ -1,4 +1,4 @@
-package pacman.entries.pacman.genetic.mlp;
+package pacman.entries.rosa.pacman.genetic.mlp;
 
 public class EvolvingPerceptron extends Perceptron
 {

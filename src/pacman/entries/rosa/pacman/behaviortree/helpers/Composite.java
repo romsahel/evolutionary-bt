@@ -1,4 +1,4 @@
-package pacman.entries.pacman.behaviortree.helpers;
+package pacman.entries.rosa.pacman.behaviortree.helpers;
 
 import java.util.ArrayList;
 import java.util.Arrays;

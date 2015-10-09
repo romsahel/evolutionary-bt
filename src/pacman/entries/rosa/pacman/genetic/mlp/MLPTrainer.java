@@ -1,4 +1,4 @@
-package pacman.entries.pacman.genetic.mlp;
+package pacman.entries.rosa.pacman.genetic.mlp;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

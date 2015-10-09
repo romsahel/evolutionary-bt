@@ -1,4 +1,4 @@
-package pacman.entries.pacman.mcts;
+package pacman.entries.rosa.pacman.mcts;
 
 import java.util.EnumMap;
 import java.util.Random;

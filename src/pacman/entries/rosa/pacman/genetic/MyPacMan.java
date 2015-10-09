@@ -1,7 +1,7 @@
-package pacman.entries.pacman.genetic;
+package pacman.entries.rosa.pacman.genetic;
 
 import pacman.controllers.Controller;
-import pacman.entries.pacman.genetic.mlp.MLPTrainer;
+import pacman.entries.rosa.pacman.genetic.mlp.MLPTrainer;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 

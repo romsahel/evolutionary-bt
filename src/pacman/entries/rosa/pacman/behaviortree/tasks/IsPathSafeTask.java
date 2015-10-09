@@ -1,9 +1,9 @@
-package pacman.entries.pacman.behaviortree.tasks;
+package pacman.entries.rosa.pacman.behaviortree.tasks;
 
 import java.awt.Color;
 
-import pacman.entries.pacman.behaviortree.MyPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.rosa.pacman.behaviortree.MyPacMan;
+import pacman.entries.rosa.pacman.behaviortree.helpers.Leaf;
 import pacman.game.Constants;
 import pacman.game.Game;
 import pacman.game.GameView;
