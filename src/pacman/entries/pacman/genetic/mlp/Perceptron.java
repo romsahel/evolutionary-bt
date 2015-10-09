@@ -7,10 +7,10 @@ import java.util.Random;
 public class Perceptron
 {
 	protected static final int MUTATION_CHANCES = 10;
-	public static final int NB_NEARGHOST_INPUT = 2;
-	protected static final int NB_INPUT = NB_NEARGHOST_INPUT * 2 + 2 + 2;
-	protected static final int NB_LAYERS = 2;
-	protected static final int NB_HIDDEN = NB_INPUT * 4;
+	public static final int NB_NEARGHOST_INPUT = 1;
+	protected static final int NB_INPUT = NB_NEARGHOST_INPUT * 2 + 3;
+	protected static final int NB_LAYERS = 1;
+	protected static final int NB_HIDDEN = 8;
 	
 	protected static final int NB_OUTPUTS = 1;
 	protected static final int NB_INPUT_WEIGHTS = NB_INPUT * NB_HIDDEN;

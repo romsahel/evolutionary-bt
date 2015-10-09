@@ -1,7 +1,6 @@
 package pacman.entries.pacman.behaviortree;
 
 import pacman.controllers.Controller;
-import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
 import pacman.entries.pacman.behaviortree.helpers.Selector;
 import pacman.entries.pacman.behaviortree.helpers.Sequence;
@@ -13,6 +12,7 @@ import pacman.entries.pacman.behaviortree.tasks.IsGhostNearTask;
 import pacman.entries.pacman.behaviortree.tasks.IsPathSafeTask;
 import pacman.entries.pacman.behaviortree.tasks.RunAwayTask;
 import pacman.entries.pacman.behaviortree.tasks.isGhostCloserTask;
+import pacman.entries.rosa.pacman.GameState;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 

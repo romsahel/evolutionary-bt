@@ -21,10 +21,10 @@ import pacman.game.Game;
 
 public class MLPTrainer
 {
-	private static final int ITERATIONS = 10;
+	private static final int ITERATIONS = 1;
 	private static final int POPULATION = 100;
 	// private static final int DEATH_RATE = POPULATION / 4;
-	private static final int TRIALS = 15;
+	private static final int TRIALS = 50;
 
 	private TreeSet<NeuralNetworkPacMan> population;
 	private final NeuralNetworkPacMan bestPacMan;
@@ -44,10 +44,11 @@ public class MLPTrainer
 
 			for (int i = 1; i < ITERATIONS + 1; i++)
 			{
-				population = processInputs(population);
+				population = processPopulation(population);
 
-//				System.out.println("It " + i + ": population size = " + population.size() + " -- best: "
-//				        + (population.first().getScore() / TRIALS));
+				// System.out.println("It " + i + ": population size = " +
+				// population.size() + " -- best: "
+				// + (population.first().getScore() / TRIALS));
 				System.out.println(Double.toString((population.first().getScore() / TRIALS)).replace(".", ","));
 			}
 			serializePopulation();
@@ -56,20 +57,33 @@ public class MLPTrainer
 		bestPacMan = population.first();
 	}
 
-	public TreeSet<NeuralNetworkPacMan> processInputs(TreeSet<NeuralNetworkPacMan> inputs)
+	/**
+	 * This method runs the experiments on all the individual to make the new
+	 * population. To improve performance, it uses ExecutorService and submits
+	 * parallely all the individuals to testing. It then waits for all the
+	 * results before returning.
+	 * 
+	 * @param inputs
+	 * @return
+	 */
+	public TreeSet<NeuralNetworkPacMan> processPopulation(TreeSet<NeuralNetworkPacMan> inputs)
 	{
-
 		int threads = Runtime.getRuntime().availableProcessors();
 		ExecutorService service = Executors.newFixedThreadPool(threads);
 
 		List<Future<NeuralNetworkPacMan>> futures = new ArrayList<Future<NeuralNetworkPacMan>>();
 		NeuralNetworkPacMan prev = null;
 		counter = 0;
+
 		for (final NeuralNetworkPacMan input : inputs)
 		{
+			// We combine 2-by-2 the best individuals of the population to
+			// create offspring
 			if (prev != null && ++counter > 0)
-				futures.add(service.submit(new ExperimentRunner(input)));
-			futures.add(service.submit(new ExperimentRunner(input, prev)));
+				futures.add(service.submit(new ExperimentRunner(input, prev)));
+			// We keep and re-experiment on the best individuals of the
+			// population
+			futures.add(service.submit(new ExperimentRunner(input)));
 			counter++;
 
 			prev = input;
@@ -92,6 +106,9 @@ public class MLPTrainer
 		return outputs;
 	}
 
+	/**
+	 * 
+	 */
 	private void experimentAndAddPacMan(NeuralNetworkPacMan newPacMan)
 	{
 		runExperiment(newPacMan, TRIALS);
@@ -100,13 +117,6 @@ public class MLPTrainer
 
 	/**
 	 * For running multiple games without visuals.
-	 *
-	 * @param pacman
-	 *            The Pac-Man controller
-	 * @param ghostController
-	 *            The Ghosts controller
-	 * @param trials
-	 *            The number of trials to be executed
 	 */
 	public void runExperiment(NeuralNetworkPacMan pacman, int trials)
 	{
@@ -130,6 +140,10 @@ public class MLPTrainer
 		pacman.setScore(avgScore);
 	}
 
+	/**
+	 * Serialize the population into a file to 'save' the current training
+	 * session. Use the deserializePopulation to then resume it.
+	 */
 	private void serializePopulation()
 	{
 		FileOutputStream fos;
@@ -149,6 +163,10 @@ public class MLPTrainer
 		}
 	}
 
+	/**
+	 * Deserialize the population from file to 'resume' a past training session,
+	 * saved with serializePopulation
+	 */
 	private void deserializePopulation()
 	{
 		population = new TreeSet<>();

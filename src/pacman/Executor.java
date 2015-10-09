@@ -62,8 +62,8 @@ public class Executor
 		// pacman.entries.pacman.behaviortree.MyPacMan();
 		Controller<MOVE> pacman = new pacman.entries.pacman.genetic.MyPacMan(true);
 
-		 exec.runGameTimed(pacman, new StarterGhosts(), visual);
-		exec.runExperiment(pacman, new StarterGhosts(), 100);
+//		 exec.runGameTimed(pacman, new StarterGhosts(), visual);
+		exec.runExperiment(pacman, new StarterGhosts(), 2000);
 
 		// */
 
@@ -123,17 +123,17 @@ public class Executor
 
 			avgScore += game.getScore();
 			// System.out.println(i + "\t" + game.getScore());
-			System.out.println(Double.toString(game.getScore()).replace(".", ","));
+//			System.out.println(Double.toString(game.getScore()).replace(".", ","));
 			max = (game.getScore() > max) ? game.getScore() : max;
 			min = (game.getScore() < min || min == -1) ? game.getScore() : min;
 			levels[game.getCurrentLevel()]++;
 		}
 
-		System.out.println();
-		System.out.println(Double.toString((avgScore / trials)).replace(".", ","));
-//		System.out.println("Average score: " + avgScore / trials);
-//		System.out.println("Maximum score: " + max);
-//		System.out.println("Minimum score: " + min);
+//		System.out.println();
+//		System.out.println(Double.toString((avgScore / trials)).replace(".", ","));
+		System.out.println("Average score: " + avgScore / trials);
+		System.out.println("Maximum score: " + max);
+		System.out.println("Minimum score: " + min);
 		// for (int i = 0; i < levels.length && levels[i] != 0; i++)
 		// System.out.println("Levels: " + i + " = " + levels[i] + "\t");
 	}

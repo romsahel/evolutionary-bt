@@ -1,7 +1,7 @@
 package pacman.entries.pacman.behaviortree.helpers;
 
-import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.MyPacMan;
+import pacman.entries.rosa.pacman.GameState;
 
 /**
  *

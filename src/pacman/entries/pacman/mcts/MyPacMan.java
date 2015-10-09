@@ -5,7 +5,7 @@ import java.util.Random;
 
 import pacman.controllers.Controller;
 import pacman.controllers.examples.StarterGhosts;
-import pacman.entries.pacman.GameState;
+import pacman.entries.rosa.pacman.GameState;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
@@ -37,7 +37,7 @@ public class MyPacMan extends Controller<MOVE>
 	}
 
 	/**
-	 * 
+	 * Select a node that should be most promising and expands it
 	 * @param node
 	 * @return
 	 */

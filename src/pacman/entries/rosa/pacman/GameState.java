@@ -1,4 +1,4 @@
-package pacman.entries.pacman;
+package pacman.entries.rosa.pacman;
 
 import java.util.Comparator;
 import java.util.TreeSet;

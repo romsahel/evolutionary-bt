@@ -1,4 +1,4 @@
-package pacman.entries.pacman;
+package pacman.entries.rosa.pacman;
 
 import pacman.game.Constants;
 import pacman.game.Game;

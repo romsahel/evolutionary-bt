@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import pacman.controllers.Controller;
 import pacman.controllers.examples.StarterGhosts;
-import pacman.entries.pacman.GameState;
-import pacman.entries.pacman.NearGhost;
+import pacman.entries.rosa.pacman.GameState;
+import pacman.entries.rosa.pacman.NearGhost;
 import pacman.game.Constants;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
@@ -82,8 +82,8 @@ public class NeuralNetworkPacMan extends Controller<MOVE>implements Comparable<N
 				input.add(0);
 			}
 			input.add(state.getNearestPill());
-			input.add(state.getNearestPowerPill());
-			input.add(tmpGame.getScore());
+			input.add(state.getNearestPowerPill()); 	
+//			input.add(tmpGame.getScore());
 			input.add(tmpGame.getPacmanNumberOfLivesRemaining());
 
 			float[] score = perceptron.getOutput(input);
