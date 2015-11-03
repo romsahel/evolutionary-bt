@@ -14,10 +14,10 @@ import pacman.game.GameView;
  * 
  * @author romsahel
  */
-public class IsPathSafeTask extends Leaf
+public class IsPathToPowerPillSafeTask extends Leaf
 {
 
-    public IsPathSafeTask(MyPacMan parent)
+    public IsPathToPowerPillSafeTask(MyPacMan parent)
     {
         super(parent);
     }
