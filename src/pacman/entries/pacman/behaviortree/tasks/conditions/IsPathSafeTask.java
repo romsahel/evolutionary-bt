@@ -1,4 +1,4 @@
-package pacman.entries.pacman.behaviortree.tasks;
+package pacman.entries.pacman.behaviortree.tasks.conditions;
 
 import java.awt.Color;
 

@@ -1,4 +1,4 @@
-package pacman.entries.pacman.behaviortree.tasks;
+package pacman.entries.pacman.behaviortree.tasks.conditions;
 
 import pacman.entries.pacman.behaviortree.MyPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
