@@ -16,7 +16,7 @@ public class GoToJunctionTask extends Leaf {
     {
         parent.setMove(game.getNextMoveTowardsTarget(
                         state.getCurrent(),
-                        state.getNearestSafeJunction(),
+                        state.getNearestSafeJunction().getIndex(),
                         Constants.DM.PATH)
         );
         return true;
