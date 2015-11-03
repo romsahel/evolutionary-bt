@@ -11,7 +11,7 @@ import pacman.entries.pacman.behaviortree.tasks.actions.EatPillTask;
 import pacman.entries.pacman.behaviortree.tasks.actions.RunAwayTask;
 import pacman.entries.pacman.behaviortree.tasks.conditions.IsGhostEdibleTask;
 import pacman.entries.pacman.behaviortree.tasks.conditions.IsGhostNearTask;
-import pacman.entries.pacman.behaviortree.tasks.conditions.IsPathSafeTask;
+import pacman.entries.pacman.behaviortree.tasks.conditions.IsPathToPowerPillSafeTask;
 import pacman.entries.pacman.behaviortree.tasks.conditions.isGhostCloserTask;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
@@ -49,7 +49,7 @@ public class MyPacMan extends Controller<MOVE>
 		                                        new EatPillTask(this))),
 		                        new Selector(3).addChildren(
 		                                new Sequence(4).addChildren(
-		                                        new IsPathSafeTask(this),
+		                                        new IsPathToPowerPillSafeTask(this),
 		                                        new ChasePowerPillTask(this)),
 		                                new RunAwayTask(this)))),
 		        new EatPillTask(this));
