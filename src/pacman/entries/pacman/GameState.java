@@ -23,8 +23,19 @@ public class GameState
 	 */
 	private int current;
 
+	private final TreeSet<Junction> nearestJunctions;
+	private Junction nearestSafeJunction;
+	
 	public GameState()
 	{
+		nearestJunctions = new TreeSet<>(new Comparator<Junction>()
+		{
+			@Override
+			public int compare(Junction o1, Junction o2)
+			{
+				return (int) (o1.getDistance() - o2.getDistance());
+			}
+		});
 		nearestGhosts = new TreeSet<>(new Comparator<NearGhost>()
 		{
 			@Override
@@ -58,6 +69,10 @@ public class GameState
 		setNearestPowerPill(game, game.getClosestNodeIndexFromNodeIndex(current,
 		        powerPills,
 		        Constants.DM.PATH));
+		
+		int[] junctions = game.getJunctionIndices();
+		for (int i = 0; i < junctions.length; i++)
+			nearestJunctions.add(new Junction(i, game.getDistance(current, junctions[i], Constants.DM.PATH)));
 	}
 
 	/**
@@ -117,5 +132,20 @@ public class GameState
 	public TreeSet<NearGhost> getNearestGhosts()
 	{
 		return nearestGhosts;
+	}
+	
+	public TreeSet<Junction> getNearestJunctions()
+	{
+		return nearestJunctions;
+	}
+
+	public Junction getNearestSafeJunction()
+	{
+		return nearestSafeJunction;
+	}
+
+	public void setNearestSafeJunction(Junction nearestSafeJunction)
+	{
+		this.nearestSafeJunction = nearestSafeJunction;
 	}
 }
