@@ -57,10 +57,7 @@ public class Executor
 		/// *
 		// run the game in asynchronous mode.
 		boolean visual = true;
-//		 Controller<MOVE> pacman = new pacman.entries.rosa.pacman.mcts.MyPacMan();
-		// Controller<MOVE> pacman = new
-		// pacman.entries.rosa.pacman.behaviortree.MyPacMan();
-		Controller<MOVE> pacman = new pacman.entries.rosa.pacman.genetic.MyPacMan(true);
+		 Controller<MOVE> pacman = new pacman.entries.pacman.behaviortree.MyPacMan();
 
 //		 exec.runGameTimed(pacman, new StarterGhosts(), visual);
 		exec.runExperiment(pacman, new StarterGhosts(), 2000);

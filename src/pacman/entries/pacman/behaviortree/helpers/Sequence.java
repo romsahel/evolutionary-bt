@@ -1,4 +1,4 @@
-package pacman.entries.rosa.pacman.behaviortree.helpers;
+package pacman.entries.pacman.behaviortree.helpers;
 
 import pacman.game.Game;
 

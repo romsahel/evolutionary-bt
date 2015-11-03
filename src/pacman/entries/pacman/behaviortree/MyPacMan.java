@@ -1,18 +1,18 @@
-package pacman.entries.rosa.pacman.behaviortree;
+package pacman.entries.pacman.behaviortree;
 
 import pacman.controllers.Controller;
-import pacman.entries.rosa.pacman.behaviortree.helpers.Composite;
-import pacman.entries.rosa.pacman.behaviortree.helpers.Selector;
-import pacman.entries.rosa.pacman.behaviortree.helpers.Sequence;
-import pacman.entries.rosa.pacman.behaviortree.tasks.ChasePowerPillTask;
-import pacman.entries.rosa.pacman.behaviortree.tasks.ChaseTask;
-import pacman.entries.rosa.pacman.behaviortree.tasks.EatPillTask;
-import pacman.entries.rosa.pacman.behaviortree.tasks.IsGhostEdibleTask;
-import pacman.entries.rosa.pacman.behaviortree.tasks.IsGhostNearTask;
-import pacman.entries.rosa.pacman.behaviortree.tasks.IsPathSafeTask;
-import pacman.entries.rosa.pacman.behaviortree.tasks.RunAwayTask;
-import pacman.entries.rosa.pacman.behaviortree.tasks.isGhostCloserTask;
-import pacman.entries.rosa.pacman.GameState;
+import pacman.entries.pacman.GameState;
+import pacman.entries.pacman.behaviortree.helpers.Composite;
+import pacman.entries.pacman.behaviortree.helpers.Selector;
+import pacman.entries.pacman.behaviortree.helpers.Sequence;
+import pacman.entries.pacman.behaviortree.tasks.ChasePowerPillTask;
+import pacman.entries.pacman.behaviortree.tasks.ChaseTask;
+import pacman.entries.pacman.behaviortree.tasks.EatPillTask;
+import pacman.entries.pacman.behaviortree.tasks.IsGhostEdibleTask;
+import pacman.entries.pacman.behaviortree.tasks.IsGhostNearTask;
+import pacman.entries.pacman.behaviortree.tasks.IsPathSafeTask;
+import pacman.entries.pacman.behaviortree.tasks.RunAwayTask;
+import pacman.entries.pacman.behaviortree.tasks.isGhostCloserTask;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
