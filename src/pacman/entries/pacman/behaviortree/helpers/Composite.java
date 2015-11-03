@@ -15,7 +15,9 @@ public abstract class Composite extends Node
 	 * DEBUG constant can be used to output in the console the path taken within
 	 * the tree.
 	 */
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
+	
+	public int nbChildren;
 	/**
 	 * The list of children nodes (subnodes)
 	 */
@@ -58,6 +60,11 @@ public abstract class Composite extends Node
 	{
 		children.addAll(Arrays.asList(nodes));
 		return this;
+	}
+	
+	public int getChildrenCount()
+	{
+		return children.size();
 	}
 
 	protected void printDebug(Node currentNode, boolean beforeAction)

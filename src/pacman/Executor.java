@@ -59,8 +59,8 @@ public class Executor
 		boolean visual = true;
 		 Controller<MOVE> pacman = new pacman.entries.pacman.behaviortree.MyPacMan();
 
-//		 exec.runGameTimed(pacman, new StarterGhosts(), visual);
-		exec.runExperiment(pacman, new StarterGhosts(), 2000);
+		 exec.runGameTimed(pacman, new StarterGhosts(), visual);
+//		exec.runExperiment(pacman, new StarterGhosts(), 2000);
 
 		// */
 

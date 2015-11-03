@@ -1,23 +1,43 @@
 package pacman.entries.pacman.behaviortree;
 
+import java.util.Random;
+
 import pacman.controllers.Controller;
 import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
+import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Node;
 import pacman.entries.pacman.behaviortree.helpers.Selector;
 import pacman.entries.pacman.behaviortree.helpers.Sequence;
+import pacman.entries.pacman.behaviortree.tasks.actions.AvoidPowerpillTask;
 import pacman.entries.pacman.behaviortree.tasks.actions.ChasePowerPillTask;
 import pacman.entries.pacman.behaviortree.tasks.actions.ChaseTask;
 import pacman.entries.pacman.behaviortree.tasks.actions.EatPillTask;
+import pacman.entries.pacman.behaviortree.tasks.actions.GoToJunctionTask;
+import pacman.entries.pacman.behaviortree.tasks.actions.RunAwayMultipleTask;
 import pacman.entries.pacman.behaviortree.tasks.actions.RunAwayTask;
+import pacman.entries.pacman.behaviortree.tasks.conditions.AreGhostFarAwayTask;
+import pacman.entries.pacman.behaviortree.tasks.conditions.IsGhostCloserTask;
 import pacman.entries.pacman.behaviortree.tasks.conditions.IsGhostEdibleTask;
 import pacman.entries.pacman.behaviortree.tasks.conditions.IsGhostNearTask;
+import pacman.entries.pacman.behaviortree.tasks.conditions.IsPacmanAtJunction;
+import pacman.entries.pacman.behaviortree.tasks.conditions.IsPathToJunctionSafeTask;
 import pacman.entries.pacman.behaviortree.tasks.conditions.IsPathToPowerPillSafeTask;
-import pacman.entries.pacman.behaviortree.tasks.conditions.isGhostCloserTask;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class MyPacMan extends Controller<MOVE>
 {
+	private static final int MAX_DEPTH = 5;
+	private static final int MAX_CHILDREN = 6;
+	private static final int LEAF_TYPE = 0;
+	private static final int SELECTOR_TYPE = 1;
+	private static final int SEQUENCE_TYPE = 2;
+	
+	private static Leaf[] setOfActions, setOfConditions;
+	
+	private final Random random;
+
 	/*
 	 * Root of the behavior tree
 	 */
@@ -29,32 +49,90 @@ public class MyPacMan extends Controller<MOVE>
 	 * Type of MOVE that will be returned at each game step
 	 */
 	private MOVE move;
+	
+	
 
-	// instead of running away from the nearest, look at all the nearest
-	// and find an exit that would work for all of them
 	public MyPacMan()
 	{
 		state = new GameState();
 		rootNode = new Selector();
-		rootNode.addChildren(
-		        new Sequence(1).addChildren(
-		                new IsGhostNearTask(this),
-		                new Selector(2).addChildren(
-		                        new Sequence(3).addChildren(
-		                                new IsGhostEdibleTask(this),
-		                                new Selector(4).addChildren(
-		                                        new Sequence(5).addChildren(
-		                                                new isGhostCloserTask(this),
-		                                                new ChaseTask(this)),
-		                                        new EatPillTask(this))),
-		                        new Selector(3).addChildren(
-		                                new Sequence(4).addChildren(
-		                                        new IsPathToPowerPillSafeTask(this),
-		                                        new ChasePowerPillTask(this)),
-		                                new RunAwayTask(this)))),
-		        new EatPillTask(this));
+		random = new Random();
+		
+		setOfActions = new Leaf[] {
+				new AvoidPowerpillTask(this),
+				new ChasePowerPillTask(this),
+				new ChaseTask(this),
+				new EatPillTask(this),
+				new GoToJunctionTask(this),
+				new RunAwayMultipleTask(this),
+				new RunAwayTask(this)
+		};
+		setOfConditions = new Leaf[] {
+			new AreGhostFarAwayTask(this),
+			new IsGhostCloserTask(this),
+			new IsGhostEdibleTask(this),
+			new IsGhostNearTask(this),
+			new IsPacmanAtJunction(this),
+			new IsPathToJunctionSafeTask(this),
+			new IsPathToPowerPillSafeTask(this)
+		};
+		
+		generateChildren(rootNode);
+
+		
+//		rootNode.addChildren(
+//		        new Sequence(1).addChildren(
+//		                new IsGhostNearTask(this),
+//		                new Selector(2).addChildren(
+//		                        new Sequence(3).addChildren(
+//		                                new IsGhostEdibleTask(this),
+//		                                new Selector(4).addChildren(
+//		                                        new Sequence(5).addChildren(
+//		                                                new isGhostCloserTask(this),
+//		                                                new ChaseTask(this)),
+//		                                        new EatPillTask(this))),
+//		                        new Selector(3).addChildren(
+//		                                new Sequence(4).addChildren(
+//		                                        new IsPathToPowerPillSafeTask(this),
+//		                                        new ChasePowerPillTask(this)),
+//		                                new RunAwayTask(this)))),
+//		        new EatPillTask(this));
+	}
+	
+	private Node generate(Composite root)
+	{
+		
+		int type;
+		if (root.getDepth() == MAX_DEPTH)
+			type = LEAF_TYPE;
+		else
+			type = random.nextInt(SEQUENCE_TYPE + 1);
+
+		if (type == LEAF_TYPE)
+			if (root.getChildrenCount() == root.nbChildren)
+				return setOfActions[random.nextInt(setOfActions.length)];
+			else
+				return setOfActions[random.nextInt(setOfConditions.length)];
+		else
+		{
+			Composite node;
+			if (type == SELECTOR_TYPE)
+				node = new Selector();
+			else
+				node = new Sequence();
+			node.setDepth(root.getDepth() + 1);
+			generateChildren(node);
+			return node;
+		}
 	}
 
+	private void generateChildren(Composite node)
+	{
+		node.nbChildren = random.nextInt(MAX_CHILDREN + 1 - 2) + 2;
+		for (int i = 0; i < node.nbChildren; i++)
+			node.addChildren(generate(node));
+	}
+	
 	@Override
 	public MOVE getMove(Game game, long timeDue)
 	{

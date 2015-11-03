@@ -9,5 +9,15 @@ import pacman.game.Game;
  */
 public abstract class Node
 {
+	private int depth;
     public abstract boolean DoAction(Game game);
+	
+    public int getDepth()
+	{
+		return depth;
+	}
+	public void setDepth(int depth)
+	{
+		this.depth = depth;
+	}
 }

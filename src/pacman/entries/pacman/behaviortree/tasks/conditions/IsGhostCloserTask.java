@@ -9,10 +9,10 @@ import pacman.game.Game;
  * A condition task: returns true if the nearest ghost is edible
  * @author romsahel
  */
-public class isGhostCloserTask extends Leaf
+public class IsGhostCloserTask extends Leaf
 {
 
-    public isGhostCloserTask(MyPacMan parent)
+    public IsGhostCloserTask(MyPacMan parent)
     {
         super(parent);
     }
