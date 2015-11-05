@@ -20,6 +20,9 @@ public class ChaseTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
+    	if (state.getNearestGhost() == null)
+    		return false;
+    	
         parent.setMove(game.getNextMoveTowardsTarget(
                 state.getCurrent(),
                 state.getNearestGhost().getIndex(),

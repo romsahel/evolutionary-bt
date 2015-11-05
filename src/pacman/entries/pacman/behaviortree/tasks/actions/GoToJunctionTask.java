@@ -14,6 +14,9 @@ public class GoToJunctionTask extends Leaf {
     @Override
     public boolean DoAction(Game game)
     {
+    	if (state.getNearestSafeJunction() == null)
+    		return false;
+    	
         parent.setMove(game.getNextMoveTowardsTarget(
                         state.getCurrent(),
                         state.getNearestSafeJunction().getIndex(),
