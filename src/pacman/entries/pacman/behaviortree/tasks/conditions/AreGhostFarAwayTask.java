@@ -20,6 +20,8 @@ public class AreGhostFarAwayTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
+    	if (state.getNearestGhost() == null)
+    		return false;
     	return (state.getNearestGhost().getDistance() > FAR_DISTANCE);
     }
 

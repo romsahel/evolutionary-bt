@@ -28,6 +28,8 @@ public class IsPathToPowerPillSafeTask extends Leaf
         final int nearestPowerPill = state.getNearestPowerPill();
         if (nearestPowerPill == -1)
             return false;
+        if (state.getNearestGhost() == null)
+        	return true;
         
         for (int node : game.getShortestPath(state.getCurrent(), nearestPowerPill))
         {

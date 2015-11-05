@@ -20,6 +20,8 @@ public class RunAwayTask extends Leaf
     @Override
     public boolean DoAction(Game game)
     {
+    	if (state.getNearestGhost() == null)
+    		return false;
         final int current = state.getCurrent();
         parent.setMove(game.getNextMoveAwayFromTarget(current, state.getNearestGhost().getIndex(), Constants.DM.PATH));
         return true;

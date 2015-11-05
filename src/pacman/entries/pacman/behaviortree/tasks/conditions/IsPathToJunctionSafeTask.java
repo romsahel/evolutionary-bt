@@ -28,6 +28,10 @@ public class IsPathToJunctionSafeTask extends Leaf
 	public boolean DoAction(Game game)
 	{
 		int i = 0;
+		
+		if (state.getNearestGhost() == null)
+			return true;
+		
 		for (Junction junction : state.getNearestJunctions())
 		{
 			boolean safe = true;
@@ -45,7 +49,7 @@ public class IsPathToJunctionSafeTask extends Leaf
 				state.setNearestSafeJunction(junction);
 				return true;
 			}
-			GameView.addPoints(game, Color.RED, game.getShortestPath(state.getCurrent(), junction.getIndex()));
+			GameView.addPoints(game, Color.GREEN, game.getShortestPath(state.getCurrent(), junction.getIndex()));
 			
 			if (i++ == JUNCTIONS_TO_CHECK)
 				break;

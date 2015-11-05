@@ -2,6 +2,7 @@ package pacman.entries.pacman.behaviortree.tasks.actions;
 
 import pacman.entries.pacman.behaviortree.MyPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.tasks.conditions.IsPathToJunctionSafeTask;
 import pacman.game.Constants;
 import pacman.game.Game;
 
@@ -14,6 +15,8 @@ public class GoToJunctionTask extends Leaf {
     @Override
     public boolean DoAction(Game game)
     {
+    	new IsPathToJunctionSafeTask(parent).DoAction(game);
+    	
     	if (state.getNearestSafeJunction() == null)
     		return false;
     	

@@ -27,6 +27,8 @@ public abstract class Composite extends Node
 	 */
 	String prefix;
 
+	private int maxDepth;
+
 	public Composite()
 	{
 		this.prefix = "";
@@ -61,10 +63,14 @@ public abstract class Composite extends Node
 		children.addAll(Arrays.asList(nodes));
 		return this;
 	}
-	
+
 	public int getChildrenCount()
 	{
 		return children.size();
+	}
+	public ArrayList<Node> getChildren()
+	{
+		return children;
 	}
 
 	protected void printDebug(Node currentNode, boolean beforeAction)
@@ -72,5 +78,15 @@ public abstract class Composite extends Node
 		if (DEBUG)
 			if ((currentNode instanceof Composite) == beforeAction)
 				System.out.println(prefix + currentNode.getClass().getSimpleName());
+	}
+
+	public int getMaxDepth()
+	{
+		return maxDepth;
+	}
+	
+	public void setMaxDepth(int maxDepth)
+	{
+		this.maxDepth = maxDepth;
 	}
 }

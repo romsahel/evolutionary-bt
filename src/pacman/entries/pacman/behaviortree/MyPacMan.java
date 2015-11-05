@@ -5,6 +5,7 @@ import java.util.Random;
 import pacman.controllers.Controller;
 import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
+import pacman.entries.pacman.behaviortree.helpers.Inverter;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.entries.pacman.behaviortree.helpers.Node;
 import pacman.entries.pacman.behaviortree.helpers.Selector;
@@ -28,14 +29,14 @@ import pacman.game.Game;
 
 public class MyPacMan extends Controller<MOVE>
 {
-	private static final int MAX_DEPTH = 5;
-	private static final int MAX_CHILDREN = 6;
+	private static final int MAX_DEPTH = 3;
+	private static final int MAX_CHILDREN = 3;
 	private static final int LEAF_TYPE = 0;
 	private static final int SELECTOR_TYPE = 1;
 	private static final int SEQUENCE_TYPE = 2;
-	
+
 	private static Leaf[] setOfActions, setOfConditions;
-	
+
 	private final Random random;
 
 	/*
@@ -49,70 +50,84 @@ public class MyPacMan extends Controller<MOVE>
 	 * Type of MOVE that will be returned at each game step
 	 */
 	private MOVE move;
-	
-	
 
 	public MyPacMan()
 	{
 		state = new GameState();
 		rootNode = new Selector();
+		rootNode.setMaxDepth(MAX_DEPTH);
 		random = new Random();
-		
-		setOfActions = new Leaf[] {
-				new AvoidPowerpillTask(this),
-				new ChasePowerPillTask(this),
-				new ChaseTask(this),
-				new EatPillTask(this),
-				new GoToJunctionTask(this),
-				new RunAwayMultipleTask(this),
-				new RunAwayTask(this)
-		};
-		setOfConditions = new Leaf[] {
-			new AreGhostFarAwayTask(this),
-			new IsGhostCloserTask(this),
-			new IsGhostEdibleTask(this),
-			new IsGhostNearTask(this),
-			new IsPacmanAtJunction(this),
-			new IsPathToJunctionSafeTask(this),
-			new IsPathToPowerPillSafeTask(this)
-		};
-		
-		generateChildren(rootNode);
 
-		
-//		rootNode.addChildren(
-//		        new Sequence(1).addChildren(
-//		                new IsGhostNearTask(this),
-//		                new Selector(2).addChildren(
-//		                        new Sequence(3).addChildren(
-//		                                new IsGhostEdibleTask(this),
-//		                                new Selector(4).addChildren(
-//		                                        new Sequence(5).addChildren(
-//		                                                new isGhostCloserTask(this),
-//		                                                new ChaseTask(this)),
-//		                                        new EatPillTask(this))),
-//		                        new Selector(3).addChildren(
-//		                                new Sequence(4).addChildren(
-//		                                        new IsPathToPowerPillSafeTask(this),
-//		                                        new ChasePowerPillTask(this)),
-//		                                new RunAwayTask(this)))),
-//		        new EatPillTask(this));
+		setOfActions = new Leaf[]
+		{
+		        new AvoidPowerpillTask(this),
+		        new ChasePowerPillTask(this),
+		        new ChaseTask(this),
+		        new EatPillTask(this),
+		        new GoToJunctionTask(this),
+		        new RunAwayMultipleTask(this),
+		        new RunAwayTask(this)
+		};
+		setOfConditions = new Leaf[]
+		{
+		        new AreGhostFarAwayTask(this),
+		        new IsGhostCloserTask(this),
+		        new IsGhostEdibleTask(this),
+		        new IsGhostNearTask(this),
+		        new IsPacmanAtJunction(this),
+		        new IsPathToJunctionSafeTask(this),
+		        new IsPathToPowerPillSafeTask(this)
+		};
+
+		generateChildren(rootNode);
+		printTree(rootNode, random.nextInt());
 	}
-	
+
+	private void printTree(Composite root, int id)
+	{
+		for (Node node : root.getChildren())
+		{
+			int nodeId = random.nextInt() - random.nextInt();
+
+			if (node.getClass() == Inverter.class)
+				System.out.println("[" + root.getClass().getSimpleName() + " " + id + "] -> [NOT "
+				        + ((Inverter) node).getInvertedNode().getClass().getSimpleName() + " " + nodeId + "]");
+			else
+				System.out.println("[" + root.getClass().getSimpleName() + " " + id + "] -> ["
+				        + node.getClass().getSimpleName() + " " + nodeId + "]");
+
+			if (node instanceof Composite)
+			{
+				Composite composite = (Composite) node;
+				printTree(composite, nodeId);
+			}
+		}
+	}
+
 	private Node generate(Composite root)
 	{
-		
+
 		int type;
-		if (root.getDepth() == MAX_DEPTH)
+		if (root.getDepth() >= root.getMaxDepth())
 			type = LEAF_TYPE;
 		else
 			type = random.nextInt(SEQUENCE_TYPE + 1);
 
 		if (type == LEAF_TYPE)
-			if (root.getChildrenCount() == root.nbChildren)
+			if (root.getChildrenCount() == root.nbChildren - 1)
 				return setOfActions[random.nextInt(setOfActions.length)];
 			else
-				return setOfActions[random.nextInt(setOfConditions.length)];
+			{
+				Leaf leaf = null;
+				do
+				{
+					leaf = setOfConditions[random.nextInt(setOfConditions.length)];
+				} while (rootHasNode(root, leaf));
+
+				if (random.nextInt(100) < 10)
+					return new Inverter(leaf);
+				return leaf;
+			}
 		else
 		{
 			Composite node;
@@ -121,9 +136,20 @@ public class MyPacMan extends Controller<MOVE>
 			else
 				node = new Sequence();
 			node.setDepth(root.getDepth() + 1);
+			node.setMaxDepth(random.nextInt(MAX_DEPTH + 1));
 			generateChildren(node);
 			return node;
 		}
+	}
+
+	private boolean rootHasNode(Composite root, Leaf leaf)
+	{
+		for (Node n : root.getChildren())
+			if (n.getClass() == leaf.getClass()
+			        || ((n instanceof Inverter)
+			        && ((Inverter) n).getInvertedNode().getClass() == leaf.getClass()))
+				return true;
+		return false;
 	}
 
 	private void generateChildren(Composite node)
@@ -132,7 +158,7 @@ public class MyPacMan extends Controller<MOVE>
 		for (int i = 0; i < node.nbChildren; i++)
 			node.addChildren(generate(node));
 	}
-	
+
 	@Override
 	public MOVE getMove(Game game, long timeDue)
 	{
