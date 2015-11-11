@@ -29,7 +29,7 @@ public class TreePrinter
 
 	public void print(Composite root, Leaf[] setOfConditions)
 	{
-		this.setOfConditions = Arrays.asList(setOfConditions);
+		TreePrinter.setOfConditions = Arrays.asList(setOfConditions);
 		System.out.println("#lineWidth: 2\n" + "#padding: 12\n" + "#arrowSize: 0.7\n");
 		HashMap<String, Integer> map = new HashMap<>();
 		final int nodeId = getId(map, root.getClass().getSimpleName());
