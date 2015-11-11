@@ -1,7 +1,5 @@
 package pacman.entries.pacman.behaviortree;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Random;
 import pacman.controllers.Controller;
 import pacman.entries.pacman.GameState;
@@ -31,7 +29,7 @@ import pacman.game.Game;
 public class MyPacMan extends Controller<MOVE>
 {
 
-	private static final int MAX_DEPTH = 10;
+	private static final int MAX_DEPTH = 4;
 	private static final int MAX_CHILDREN = 3;
 	private static final int LEAF_TYPE = 0;
 	private static final int SELECTOR_TYPE = 1;
@@ -82,59 +80,7 @@ public class MyPacMan extends Controller<MOVE>
 		};
 
 		generateChildren(rootNode);
-		printTree(rootNode);
-	}
-
-	private void printTree(Composite root)
-	{
-		System.out.println("#lineWidth: 2\n" + "#padding: 12\n" + "#arrowSize: 0.7\n");
-		HashMap<String, Integer> map = new HashMap<>();
-		final int nodeId = getId(map, root.getClass().getSimpleName());
-		System.out.println("[" + getClassifier(root) + root.getClass().getSimpleName() + " " + nodeId + "]");
-		printTree(map, rootNode, nodeId);
-	}
-
-	private int getId(HashMap<String, Integer> map, String key)
-	{
-		int id = 0;
-		if (map.containsKey(key))
-			id = map.get(key);
-		map.put(key, id + 1);
-		return id;
-	}
-
-	private void printTree(HashMap<String, Integer> map, Composite root, int id)
-	{
-		for (Node node : root.getChildren())
-		{
-			int nodeId = getId(map, node.getClass().getSimpleName());
-			if (node.getClass() == Inverter.class)
-				System.out.println("[" + root.getClass().getSimpleName() + " " + id + "] -> [NOT "
-								   + ((Inverter) node).getInvertedNode().getClass().getSimpleName() + " " + nodeId + "]");
-			else
-				System.out.println("[" + root.getClass().getSimpleName() + " " + id + "] -> ["
-								   + getClassifier(node) + node.getClass().getSimpleName() + " " + nodeId + "]");
-
-			if (node instanceof Composite)
-			{
-				Composite composite = (Composite) node;
-				printTree(map, composite, nodeId);
-			}
-		}
-	}
-
-	private String getClassifier(Node node)
-	{
-		String classifier = "";
-		if (node instanceof Composite)
-			if (node.getClass() == Selector.class)
-				classifier = "<choice> ";
-			else
-				classifier = "<state> ";
-		else if (Arrays.asList(setOfConditions).contains((Leaf) node))
-			classifier = "<abstract> ";
-
-		return classifier;
+		TreePrinter.getInstance().print(rootNode, setOfConditions);
 	}
 
 	private Node generate(Composite root)
