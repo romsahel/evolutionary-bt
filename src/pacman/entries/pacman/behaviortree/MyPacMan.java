@@ -1,7 +1,8 @@
 package pacman.entries.pacman.behaviortree;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
-
 import pacman.controllers.Controller;
 import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
@@ -29,7 +30,8 @@ import pacman.game.Game;
 
 public class MyPacMan extends Controller<MOVE>
 {
-	private static final int MAX_DEPTH = 3;
+
+	private static final int MAX_DEPTH = 10;
 	private static final int MAX_CHILDREN = 3;
 	private static final int LEAF_TYPE = 0;
 	private static final int SELECTOR_TYPE = 1;
@@ -60,53 +62,83 @@ public class MyPacMan extends Controller<MOVE>
 
 		setOfActions = new Leaf[]
 		{
-		        new AvoidPowerpillTask(this),
-		        new ChasePowerPillTask(this),
-		        new ChaseTask(this),
-		        new EatPillTask(this),
-		        new GoToJunctionTask(this),
-		        new RunAwayMultipleTask(this),
-		        new RunAwayTask(this)
+			new AvoidPowerpillTask(this),
+			new ChasePowerPillTask(this),
+			new ChaseTask(this),
+			new EatPillTask(this),
+			new GoToJunctionTask(this),
+			new RunAwayMultipleTask(this),
+			new RunAwayTask(this)
 		};
 		setOfConditions = new Leaf[]
 		{
-		        new AreGhostFarAwayTask(this),
-		        new IsGhostCloserTask(this),
-		        new IsGhostEdibleTask(this),
-		        new IsGhostNearTask(this),
-		        new IsPacmanAtJunction(this),
-		        new IsPathToJunctionSafeTask(this),
-		        new IsPathToPowerPillSafeTask(this)
+			new AreGhostFarAwayTask(this),
+			new IsGhostCloserTask(this),
+			new IsGhostEdibleTask(this),
+			new IsGhostNearTask(this),
+			new IsPacmanAtJunction(this),
+			new IsPathToJunctionSafeTask(this),
+			new IsPathToPowerPillSafeTask(this)
 		};
 
 		generateChildren(rootNode);
-		printTree(rootNode, random.nextInt());
+		printTree(rootNode);
 	}
 
-	private void printTree(Composite root, int id)
+	private void printTree(Composite root)
+	{
+		System.out.println("#lineWidth: 2\n" + "#padding: 12\n" + "#arrowSize: 0.7\n");
+		HashMap<String, Integer> map = new HashMap<>();
+		final int nodeId = getId(map, root.getClass().getSimpleName());
+		System.out.println("[" + getClassifier(root) + root.getClass().getSimpleName() + " " + nodeId + "]");
+		printTree(map, rootNode, nodeId);
+	}
+
+	private int getId(HashMap<String, Integer> map, String key)
+	{
+		int id = 0;
+		if (map.containsKey(key))
+			id = map.get(key);
+		map.put(key, id + 1);
+		return id;
+	}
+
+	private void printTree(HashMap<String, Integer> map, Composite root, int id)
 	{
 		for (Node node : root.getChildren())
 		{
-			int nodeId = random.nextInt() - random.nextInt();
-
+			int nodeId = getId(map, node.getClass().getSimpleName());
 			if (node.getClass() == Inverter.class)
 				System.out.println("[" + root.getClass().getSimpleName() + " " + id + "] -> [NOT "
-				        + ((Inverter) node).getInvertedNode().getClass().getSimpleName() + " " + nodeId + "]");
+								   + ((Inverter) node).getInvertedNode().getClass().getSimpleName() + " " + nodeId + "]");
 			else
 				System.out.println("[" + root.getClass().getSimpleName() + " " + id + "] -> ["
-				        + node.getClass().getSimpleName() + " " + nodeId + "]");
+								   + getClassifier(node) + node.getClass().getSimpleName() + " " + nodeId + "]");
 
 			if (node instanceof Composite)
 			{
 				Composite composite = (Composite) node;
-				printTree(composite, nodeId);
+				printTree(map, composite, nodeId);
 			}
 		}
 	}
 
+	private String getClassifier(Node node)
+	{
+		String classifier = "";
+		if (node instanceof Composite)
+			if (node.getClass() == Selector.class)
+				classifier = "<choice> ";
+			else
+				classifier = "<state> ";
+		else if (Arrays.asList(setOfConditions).contains((Leaf) node))
+			classifier = "<abstract> ";
+
+		return classifier;
+	}
+
 	private Node generate(Composite root)
 	{
-
 		int type;
 		if (root.getDepth() >= root.getMaxDepth())
 			type = LEAF_TYPE;
@@ -117,39 +149,35 @@ public class MyPacMan extends Controller<MOVE>
 			if (root.getChildrenCount() == root.nbChildren - 1)
 				return setOfActions[random.nextInt(setOfActions.length)];
 			else
-			{
-				Leaf leaf = null;
-				do
-				{
-					leaf = setOfConditions[random.nextInt(setOfConditions.length)];
-				} while (rootHasNode(root, leaf));
-
-				if (random.nextInt(100) < 10)
-					return new Inverter(leaf);
-				return leaf;
-			}
+				return generateCondition(root);
 		else
-		{
-			Composite node;
-			if (type == SELECTOR_TYPE)
-				node = new Selector();
-			else
-				node = new Sequence();
-			node.setDepth(root.getDepth() + 1);
-			node.setMaxDepth(random.nextInt(MAX_DEPTH + 1));
-			generateChildren(node);
-			return node;
-		}
+			return generateComposite(type, root);
 	}
 
-	private boolean rootHasNode(Composite root, Leaf leaf)
+	private Node generateComposite(int type, Composite root)
 	{
-		for (Node n : root.getChildren())
-			if (n.getClass() == leaf.getClass()
-			        || ((n instanceof Inverter)
-			        && ((Inverter) n).getInvertedNode().getClass() == leaf.getClass()))
-				return true;
-		return false;
+		Composite node;
+		if (type == SELECTOR_TYPE)
+			node = new Selector();
+		else
+			node = new Sequence();
+		node.setDepth(root.getDepth() + 1);
+		node.setMaxDepth(random.nextInt(MAX_DEPTH + 1));
+		generateChildren(node);
+		return node;
+	}
+
+	private Node generateCondition(Composite root)
+	{
+		Leaf leaf = null;
+		do
+		{
+			leaf = setOfConditions[random.nextInt(setOfConditions.length)];
+		} while (rootHasNode(root, leaf));
+
+		if (random.nextInt(100) < 10)
+			return new Inverter(leaf);
+		return leaf;
 	}
 
 	private void generateChildren(Composite node)
@@ -157,6 +185,16 @@ public class MyPacMan extends Controller<MOVE>
 		node.nbChildren = random.nextInt(MAX_CHILDREN + 1 - 2) + 2;
 		for (int i = 0; i < node.nbChildren; i++)
 			node.addChildren(generate(node));
+	}
+
+	private boolean rootHasNode(Composite root, Leaf leaf)
+	{
+		for (Node n : root.getChildren())
+			if (n.getClass() == leaf.getClass()
+				|| ((n instanceof Inverter)
+					&& ((Inverter) n).getInvertedNode().getClass() == leaf.getClass()))
+				return true;
+		return false;
 	}
 
 	@Override
@@ -171,7 +209,7 @@ public class MyPacMan extends Controller<MOVE>
 
 	/**
 	 * @param move
-	 *            the move to set
+	 *             the move to set
 	 */
 	public void setMove(MOVE move)
 	{
