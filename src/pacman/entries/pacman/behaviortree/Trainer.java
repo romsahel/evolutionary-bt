@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import pacman.controllers.examples.StarterGhosts;
+import pacman.entries.pacman.behaviortree.helpers.Composite;
 import pacman.game.Constants;
 import pacman.game.Game;
 
@@ -58,7 +59,9 @@ public final class Trainer
 		for (int i = 1; i < numIterations + 1; i++)
 		{
 			population = processPopulation(population);
-			System.out.println(Double.toString((population.first().getScore() / numTrials)).replace(".", ","));
+
+			System.out.println("It " + i + ": population size = " + population.size() + " -- best: " + (population.first().getScore() / numTrials));
+//			System.out.println(Double.toString((population.first().getScore() / numTrials)).replace(".", ","));
 		}
 		serializePopulation();
 
@@ -89,8 +92,11 @@ public final class Trainer
 		{
 			// We combine 2-by-2 the best individuals of the population to
 			// create offspring
-			if (prev != null && ++counter > 0)
+			if (prev != null)
+			{
+				counter++;
 				futures.add(service.submit(new ExperimentRunner(input, prev)));
+			}
 			// We keep and re-experiment on the best individuals of the
 			// population
 			futures.add(service.submit(new ExperimentRunner(input)));
@@ -150,7 +156,6 @@ public final class Trainer
 		pacman.setScore(avgScore);
 	}
 
-
 	/**
 	 * Serialize the population into a file to 'save' the current training
 	 * session. Use the deserializePopulation to then resume it.
@@ -184,14 +189,12 @@ public final class Trainer
 		try
 		{
 			fis = new FileInputStream("population.ser");
-			ObjectInputStream iis = new ObjectInputStream(fis);
-			float[] array = null;
-			int n = iis.readInt();
-			for (int i = 0; i < n; i++)
-				iis.readObject();
-//				array = (float[]) iis.readObject();
-//				experimentAndAddPacMan(new BTPacMan(new Perceptron(array)));
-			iis.close();
+			try (ObjectInputStream iis = new ObjectInputStream(fis))
+			{
+				int n = iis.readInt();
+				for (int i = 0; i < n; i++)
+					experimentAndAddPacMan(new BTPacMan((Composite) iis.readObject()));
+			}
 			fis.close();
 		} catch (IOException | ClassNotFoundException e)
 		{
@@ -200,7 +203,6 @@ public final class Trainer
 		System.out.println("Population: " + population.size() + "/" + populationSize);
 	}
 
-	
 	public BTPacMan getBestPacMan()
 	{
 		return bestPacMan;

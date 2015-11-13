@@ -31,7 +31,7 @@ public class BTPacMan extends Controller<MOVE>
 
 	public BTPacMan()
 	{
-		this.rootNode = treeGenerator.generate(true);
+		this.rootNode = treeGenerator.generate();
 	}
 
 	public BTPacMan(BTPacMan parent1, BTPacMan parent2)
@@ -85,5 +85,10 @@ public class BTPacMan extends Controller<MOVE>
 	public Composite getRootNode()
 	{
 		return rootNode;
+	}
+
+	public void print()
+	{
+		treeGenerator.print();
 	}
 }

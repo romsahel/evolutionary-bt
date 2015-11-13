@@ -25,6 +25,7 @@ public class MyPacMan extends Controller<MOVE>
 	{
 		Trainer trainer = new Trainer(100, 100, 10);
 		bestIndividual = trainer.train();
+		bestIndividual.print();
 	}
 
 	@Override
