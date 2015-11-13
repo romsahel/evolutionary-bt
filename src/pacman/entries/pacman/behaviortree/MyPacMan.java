@@ -2,7 +2,6 @@ package pacman.entries.pacman.behaviortree;
 
 import pacman.controllers.Controller;
 import pacman.entries.pacman.GameState;
-import pacman.entries.pacman.behaviortree.helpers.Composite;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
@@ -13,31 +12,25 @@ public class MyPacMan extends Controller<MOVE>
 	/*
 	 * Root of the behavior tree
 	 */
-	private final Composite rootNode;
+	private final BTPacMan bestIndividual;
 
-	private final GameState state;
+	private final GameState state = new GameState();
 
 	/*
 	 * Type of MOVE that will be returned at each game step
 	 */
 	private MOVE move;
-	private final TreeGenerator treeGenerator;
 
 	public MyPacMan()
 	{
-		state = new GameState();
-
-		treeGenerator = new TreeGenerator(this);
-		rootNode = treeGenerator.generate(true);
+		Trainer trainer = new Trainer(100, 100, 10);
+		bestIndividual = trainer.train();
 	}
 
 	@Override
 	public MOVE getMove(Game game, long timeDue)
 	{
-		state.update(game);
-		rootNode.DoAction(game);
-		if (Composite.DEBUG)
-			System.out.println("===================");
+		bestIndividual.getMove(game, timeDue);
 		return move;
 	}
 

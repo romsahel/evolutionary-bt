@@ -3,7 +3,7 @@ package pacman.entries.pacman.behaviortree.tasks.conditions;
 import java.awt.Color;
 
 import pacman.entries.pacman.Junction;
-import pacman.entries.pacman.behaviortree.MyPacMan;
+import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.game.Constants;
 import pacman.game.Game;
@@ -19,7 +19,7 @@ public class IsPathToJunctionSafeTask extends Leaf
 
 	public static int JUNCTIONS_TO_CHECK = 3;
 
-	public IsPathToJunctionSafeTask(MyPacMan parent)
+	public IsPathToJunctionSafeTask(BTPacMan parent)
 	{
 		super(parent);
 	}

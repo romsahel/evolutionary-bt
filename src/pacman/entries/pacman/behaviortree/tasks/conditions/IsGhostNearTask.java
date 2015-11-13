@@ -1,6 +1,6 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
-import pacman.entries.pacman.behaviortree.MyPacMan;
+import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.game.Game;
 
@@ -14,7 +14,7 @@ public class IsGhostNearTask extends Leaf
 
     public static int RUN_DISTANCE = 20;
 
-	public IsGhostNearTask(MyPacMan parent)
+	public IsGhostNearTask(BTPacMan parent)
     {
         super(parent);
     }

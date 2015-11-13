@@ -52,7 +52,7 @@ public class TreeGenerator
 
 	private static final Random random = new Random();
 
-	public TreeGenerator(MyPacMan thisPacman)
+	public TreeGenerator(BTPacMan thisPacman)
 	{
 		setOfActions = new Leaf[]
 		{
@@ -159,5 +159,10 @@ public class TreeGenerator
 	public Composite getRoot()
 	{
 		return rootNode;
+	}
+
+	public void setRoot(Composite rootNode)
+	{
+		this.rootNode = rootNode;
 	}
 }

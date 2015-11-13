@@ -1,7 +1,7 @@
 package pacman.entries.pacman.behaviortree.helpers;
 
 import pacman.entries.pacman.GameState;
-import pacman.entries.pacman.behaviortree.MyPacMan;
+import pacman.entries.pacman.behaviortree.BTPacMan;
 
 /**
  *
@@ -9,10 +9,10 @@ import pacman.entries.pacman.behaviortree.MyPacMan;
  */
 public abstract class Leaf extends Node
 {
-    protected final MyPacMan parent;
+    protected final BTPacMan parent;
     protected final GameState state;
 
-    public Leaf(MyPacMan parent)
+    public Leaf(BTPacMan parent)
     {
         this.parent = parent;
         this.state = parent.getState();

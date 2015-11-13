@@ -1,8 +1,5 @@
 package pacman;
 
-import static pacman.game.Constants.DELAY;
-import static pacman.game.Constants.INTERVAL_WAIT;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,11 +9,12 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Random;
-
 import pacman.controllers.Controller;
 import pacman.controllers.HumanController;
 import pacman.controllers.examples.StarterGhosts;
+import static pacman.game.Constants.DELAY;
 import pacman.game.Constants.GHOST;
+import static pacman.game.Constants.INTERVAL_WAIT;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 import pacman.game.GameView;
@@ -233,7 +231,7 @@ public class Executor
 	 * Run the game in asynchronous mode but proceed as soon as both controllers
 	 * replied. The time limit still applies so so the game will proceed after
 	 * 40ms regardless of whether the controllers managed to calculate a turn.
-	 * 
+	 *
 	 * @param pacManController
 	 *            The Pac-Man controller
 	 * @param ghostController

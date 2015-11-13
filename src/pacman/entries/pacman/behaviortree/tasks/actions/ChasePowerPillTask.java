@@ -1,6 +1,6 @@
 package pacman.entries.pacman.behaviortree.tasks.actions;
 
-import pacman.entries.pacman.behaviortree.MyPacMan;
+import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.game.Constants;
 import pacman.game.Game;
@@ -12,7 +12,7 @@ import pacman.game.Game;
 public class ChasePowerPillTask extends Leaf
 {
 
-    public ChasePowerPillTask(MyPacMan parent)
+    public ChasePowerPillTask(BTPacMan parent)
     {
         super(parent);
     }
@@ -21,8 +21,8 @@ public class ChasePowerPillTask extends Leaf
     public boolean DoAction(Game game)
     {
         parent.setMove(game.getNextMoveTowardsTarget(
-                state.getCurrent(), 
-                state.getNearestPowerPill(), 
+                state.getCurrent(),
+                state.getNearestPowerPill(),
                 Constants.DM.PATH));
         return true;
     }

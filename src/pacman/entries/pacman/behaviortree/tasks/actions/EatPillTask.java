@@ -1,6 +1,6 @@
 package pacman.entries.pacman.behaviortree.tasks.actions;
 
-import pacman.entries.pacman.behaviortree.MyPacMan;
+import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.game.Constants;
 import pacman.game.Game;
@@ -12,7 +12,7 @@ import pacman.game.Game;
 public class EatPillTask extends Leaf
 {
 
-    public EatPillTask(MyPacMan parent)
+    public EatPillTask(BTPacMan parent)
     {
         super(parent);
     }

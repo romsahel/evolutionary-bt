@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * Represents a composite node, ie a node with multiple children such as
  * Selectors and Sequences.
- * 
+ *
  * @author romsahel
  */
 public abstract class Composite extends Node
@@ -15,8 +15,8 @@ public abstract class Composite extends Node
 	 * DEBUG constant can be used to output in the console the path taken within
 	 * the tree.
 	 */
-	public static final boolean DEBUG = true;
-	
+	public static final boolean DEBUG = false;
+
 	public int nbChildren;
 	/**
 	 * The list of children nodes (subnodes)
@@ -37,7 +37,7 @@ public abstract class Composite extends Node
 	/**
 	 * This constructor allows to give the depth of the node in the tree, which
 	 * allows a cleaner and indented debug output
-	 * 
+	 *
 	 * @param depth
 	 *            the depth of the node in the tree.
 	 */
@@ -53,7 +53,7 @@ public abstract class Composite extends Node
 
 	/**
 	 * Add children to the list
-	 * 
+	 *
 	 * @param nodes
 	 *            children of the current node
 	 * @return this object, allows for method chaining
@@ -84,7 +84,7 @@ public abstract class Composite extends Node
 	{
 		return maxDepth;
 	}
-	
+
 	public void setMaxDepth(int maxDepth)
 	{
 		this.maxDepth = maxDepth;
