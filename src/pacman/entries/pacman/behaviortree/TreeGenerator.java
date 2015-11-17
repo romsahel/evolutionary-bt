@@ -5,6 +5,7 @@
  */
 package pacman.entries.pacman.behaviortree;
 
+import java.util.ArrayList;
 import java.util.Random;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
 import pacman.entries.pacman.behaviortree.helpers.Inverter;
@@ -48,7 +49,8 @@ public class TreeGenerator
 	private static final int SEQUENCE_TYPE = 2;
 
 	private Composite rootNode;
-	private final Leaf[] setOfActions, setOfConditions;
+	public final Leaf[] setOfActions, setOfConditions;
+	private ArrayList<Node> leaves = new ArrayList<>();
 
 	private static final Random random = new Random();
 
@@ -107,7 +109,7 @@ public class TreeGenerator
 				leaf = setOfActions[random.nextInt(setOfActions.length)];
 			else
 				leaf = generateCondition(root);
-                        rootNode.getLeaves().add(leaf);
+                        leaves.add(leaf);
                         return leaf;
                 }
                 else
@@ -171,4 +173,9 @@ public class TreeGenerator
 	{
 		this.rootNode = rootNode;
 	}
+        
+        public ArrayList<Node> getLeaves() 
+        {
+            return leaves;
+        }
 }
