@@ -89,10 +89,22 @@ public abstract class Composite extends Node
 	{
 		this.maxDepth = maxDepth;
 	}
+        
+        
+        public Composite copy()
+        {
+            Composite newRoot = (this instanceof Selector) ? new Selector() : new Sequence();
+            newRoot.maxDepth = maxDepth;
+            newRoot.nbChildren = nbChildren;
 
-    public void incrLeavesCount() 
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+            for (Node c : this.getChildren()) 
+            {
+                if (c instanceof Composite)
+                    newRoot.addChildren(((Composite)c).copy());
+                else
+                    newRoot.addChildren(c);
+            }
+            
+            return newRoot;
+        }
 }

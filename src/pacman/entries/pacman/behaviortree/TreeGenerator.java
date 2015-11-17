@@ -104,12 +104,18 @@ public class TreeGenerator
 		if (type == LEAF_TYPE)
                 {
                     Node leaf = null;
-                    
-			if (root.getChildrenCount() == root.nbChildren - 1)
-				leaf = setOfActions[random.nextInt(setOfActions.length)];
-			else
-				leaf = generateCondition(root);
-                        leaves.add(leaf);
+                    if (root.getChildrenCount() == root.nbChildren - 1)
+                    {
+                            leaf = setOfActions[random.nextInt(setOfActions.length)];
+                            leaf.type = Node.Type.Action;
+                    }
+                    else
+                    {
+                            leaf = generateCondition(root);
+                            leaf.type = Node.Type.Condition;
+                    }
+                    leaves.add(leaf);
+                    leaf.parent = root;
                         return leaf;
                 }
                 else

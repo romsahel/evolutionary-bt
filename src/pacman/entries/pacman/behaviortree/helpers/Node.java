@@ -9,7 +9,16 @@ import pacman.game.Game;
  */
 public abstract class Node
 {
-	private int depth;
+    public enum Type
+    {
+        Composite, 
+        Condition,
+        Action,
+    }
+    public Type type = Type.Composite;
+    public Composite parent = null;
+    
+    private int depth;
     public abstract boolean DoAction(Game game);
 	
     public int getDepth()
