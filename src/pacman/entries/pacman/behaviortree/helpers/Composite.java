@@ -22,6 +22,8 @@ public abstract class Composite extends Node
 	 * The list of children nodes (subnodes)
 	 */
 	ArrayList<Node> children = new ArrayList<>();
+        
+	private ArrayList<Node> leaves = new ArrayList<>();
 	/**
 	 * Used to indent the debug output
 	 */
@@ -89,4 +91,16 @@ public abstract class Composite extends Node
 	{
 		this.maxDepth = maxDepth;
 	}
+
+    public void incrLeavesCount() 
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * @return the leaves
+     */
+    public ArrayList<Node> getLeaves() {
+        return leaves;
+    }
 }

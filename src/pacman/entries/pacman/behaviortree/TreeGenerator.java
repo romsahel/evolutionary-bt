@@ -100,11 +100,17 @@ public class TreeGenerator
 			type = random.nextInt(SEQUENCE_TYPE + 1);
 
 		if (type == LEAF_TYPE)
+                {
+                    Node leaf = null;
+                    
 			if (root.getChildrenCount() == root.nbChildren - 1)
-				return setOfActions[random.nextInt(setOfActions.length)];
+				leaf = setOfActions[random.nextInt(setOfActions.length)];
 			else
-				return generateCondition(root);
-		else
+				leaf = generateCondition(root);
+                        rootNode.getLeaves().add(leaf);
+                        return leaf;
+                }
+                else
 			return generateComposite(type, root);
 	}
 
