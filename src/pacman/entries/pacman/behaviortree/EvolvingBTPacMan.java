@@ -10,6 +10,7 @@ import java.util.Random;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.entries.pacman.behaviortree.helpers.Node;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 
 /**
  *
@@ -30,16 +31,17 @@ public class EvolvingBTPacMan extends BTPacMan
 		super();
 	}
 
-	public EvolvingBTPacMan(BTPacMan parent1, BTPacMan parent2)
+	public EvolvingBTPacMan(EvolvingBTPacMan copy)
 	{
+		super(copy);
 	}
 
-	public static BTPacMan Mutate(BTPacMan parent)
+	public static EvolvingBTPacMan Mutate(EvolvingBTPacMan parent)
 	{
-		BTPacMan mutatedParent = parent;
+		EvolvingBTPacMan mutatedParent = parent;
 
 		int index = random.nextInt(mutatedParent.treeGenerator.getLeaves().size());
-		Node leaf = mutatedParent.treeGenerator.getLeaves().get(index);
+		Leaf leaf = mutatedParent.treeGenerator.getLeaves().get(index);
 
 		if (leaf.type == Node.Type.Condition)
 			if (random.nextBoolean())
@@ -60,39 +62,42 @@ public class EvolvingBTPacMan extends BTPacMan
 		return mutatedParent;
 	}
 
-	private static void switchLeaf(final Leaf[] set, Node leaf, BTPacMan mutatedParent)
+	private static void switchLeaf(final Task[] set, Leaf leaf, EvolvingBTPacMan mutatedParent)
 	{
-		Leaf newLeaf = set[random.nextInt(set.length)];
-		while (newLeaf.equals(leaf))
-			newLeaf = set[random.nextInt(set.length)];
+		Task newTask = set[random.nextInt(set.length)];
+		while (newTask.equals(leaf.getTask()))
+			newTask = set[random.nextInt(set.length)];
 
-		replaceNode(leaf, newLeaf, mutatedParent.treeGenerator.getLeaves());
+		replaceLeaf(leaf, new Leaf(newTask, false), mutatedParent.treeGenerator.getLeaves());
 	}
 
-	public static BTPacMan[] combine(BTPacMan parent1, BTPacMan parent2)
+	public static EvolvingBTPacMan[] combine(EvolvingBTPacMan parent1, EvolvingBTPacMan parent2)
 	{
 		// create two trees from the two parents
-		BTPacMan[] result = new BTPacMan[]
+		EvolvingBTPacMan[] result = new EvolvingBTPacMan[]
 		{
-			new BTPacMan(parent1.getRootNode().copy()),
-			new BTPacMan(parent2.getRootNode().copy()),
+			new EvolvingBTPacMan(parent1),
+			new EvolvingBTPacMan(parent2),
 		};
 
 		// get a random leaf from the parent1: node1
-		final ArrayList<Node> leaves1 = result[0].treeGenerator.getLeaves();
-		final Node node1 = leaves1.get(random.nextInt(leaves1.size()));
+		final ArrayList<Leaf> leaves1 = result[0].treeGenerator.getLeaves();
+		final Leaf node1 = leaves1.get(random.nextInt(leaves1.size()));
 
 		// get a random leaf from the parent2, matching the type of node1: node2
-		final ArrayList<Node> leaves2 = result[1].treeGenerator.getLeaves();
-		Node node2 = leaves2.get(random.nextInt(leaves2.size()));
-		while (node2.type != node1.type)
+		final ArrayList<Leaf> leaves2 = result[1].treeGenerator.getLeaves();
+		Leaf node2 = leaves2.get(random.nextInt(leaves2.size()));
+		while (node2.type != node1.type || node2.getTask().getClass() == node1.getTask().getClass())
 			node2 = leaves2.get(random.nextInt(leaves2.size()));
 
+		System.out.println(node1.getTask().getClass().getSimpleName());
+		System.out.println(node2.getTask().getClass().getSimpleName());
+
 		// replace node1 by node2 in result[0] (copy of parent1)
-		replaceNode(node1, node2, leaves1);
+		replaceLeaf(node1, node2, leaves1);
 
 		// replace node2 by node1 in result[1] (copy of parent2)
-		replaceNode(node2, node1, leaves2);
+		replaceLeaf(node2, node1, leaves2);
 
 		return result;
 	}
@@ -102,7 +107,7 @@ public class EvolvingBTPacMan extends BTPacMan
 	 * Go through node1's parent's list of children until node1 is found, removes it and add node2 in its
 	 * place
 	 */
-	private static void replaceNode(final Node node1, final Node node2, final ArrayList<Node> leaves)
+	private static void replaceLeaf(final Leaf node1, final Leaf node2, final ArrayList<Leaf> leaves)
 	{
 		final ArrayList<Node> children = node1.parent.getChildren();
 		for (int i = 0; i < children.size(); i++)

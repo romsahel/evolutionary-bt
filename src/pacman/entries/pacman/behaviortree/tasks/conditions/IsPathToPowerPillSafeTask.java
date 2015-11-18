@@ -3,7 +3,7 @@ package pacman.entries.pacman.behaviortree.tasks.conditions;
 import java.awt.Color;
 
 import pacman.entries.pacman.behaviortree.BTPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants;
 import pacman.game.Game;
 import pacman.game.GameView;
@@ -14,7 +14,7 @@ import pacman.game.GameView;
  * 
  * @author romsahel
  */
-public class IsPathToPowerPillSafeTask extends Leaf
+public class IsPathToPowerPillSafeTask extends Task
 {
 
     public IsPathToPowerPillSafeTask(BTPacMan parent)

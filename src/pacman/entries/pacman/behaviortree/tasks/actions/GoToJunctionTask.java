@@ -1,12 +1,12 @@
 package pacman.entries.pacman.behaviortree.tasks.actions;
 
 import pacman.entries.pacman.behaviortree.BTPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.entries.pacman.behaviortree.tasks.conditions.IsPathToJunctionSafeTask;
 import pacman.game.Constants;
 import pacman.game.Game;
 
-public class GoToJunctionTask extends Leaf {
+public class GoToJunctionTask extends Task {
     public GoToJunctionTask(BTPacMan parent)
     {
         super(parent);

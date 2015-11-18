@@ -8,11 +8,11 @@ package pacman.entries.pacman.behaviortree;
 import java.util.ArrayList;
 import java.util.Random;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
-import pacman.entries.pacman.behaviortree.helpers.Inverter;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.entries.pacman.behaviortree.helpers.Node;
 import pacman.entries.pacman.behaviortree.helpers.Selector;
 import pacman.entries.pacman.behaviortree.helpers.Sequence;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.entries.pacman.behaviortree.tasks.actions.AvoidPowerpillTask;
 import pacman.entries.pacman.behaviortree.tasks.actions.ChasePowerPillTask;
 import pacman.entries.pacman.behaviortree.tasks.actions.ChaseTask;
@@ -49,14 +49,14 @@ public class TreeGenerator
 	private static final int SEQUENCE_TYPE = 2;
 
 	private Composite rootNode;
-	public final Leaf[] setOfActions, setOfConditions;
-	private ArrayList<Node> leaves = new ArrayList<>();
+	public final Task[] setOfActions, setOfConditions;
+	private final ArrayList<Leaf> leaves = new ArrayList<>();
 
 	private static final Random random = new Random();
 
 	public TreeGenerator(BTPacMan thisPacman)
 	{
-		setOfActions = new Leaf[]
+		setOfActions = new Task[]
 		{
 			new AvoidPowerpillTask(thisPacman),
 			new ChasePowerPillTask(thisPacman),
@@ -66,7 +66,7 @@ public class TreeGenerator
 			new RunAwayMultipleTask(thisPacman),
 			new RunAwayTask(thisPacman)
 		};
-		setOfConditions = new Leaf[]
+		setOfConditions = new Task[]
 		{
 			new AreGhostFarAwayTask(thisPacman),
 			new IsGhostCloserTask(thisPacman),
@@ -102,23 +102,24 @@ public class TreeGenerator
 			type = random.nextInt(SEQUENCE_TYPE + 1);
 
 		if (type == LEAF_TYPE)
-                {
-                    Node leaf = null;
-                    if (root.getChildrenCount() == root.nbChildren - 1)
-                    {
-                            leaf = setOfActions[random.nextInt(setOfActions.length)];
-                            leaf.type = Node.Type.Action;
-                    }
-                    else
-                    {
-                            leaf = generateCondition(root);
-                            leaf.type = Node.Type.Condition;
-                    }
-                    leaves.add(leaf);
-                    leaf.parent = root;
-                        return leaf;
-                }
-                else
+		{
+			Leaf leaf;
+			if (root.getChildrenCount() == root.nbChildren - 1)
+			{
+				leaf = new Leaf(setOfActions[random.nextInt(setOfActions.length)], false);
+				leaf.type = Node.Type.Action;
+			}
+			else
+			{
+				leaf = generateCondition(root);
+				leaf.type = Node.Type.Condition;
+			}
+
+			leaves.add(leaf);
+			leaf.parent = root;
+			return leaf;
+		}
+		else
 			return generateComposite(type, root);
 	}
 
@@ -135,17 +136,15 @@ public class TreeGenerator
 		return node;
 	}
 
-	private Node generateCondition(Composite root)
+	private Leaf generateCondition(Composite root)
 	{
-		Leaf leaf = null;
+		Task task = null;
 		do
 		{
-			leaf = setOfConditions[random.nextInt(setOfConditions.length)];
-		} while (rootHasNode(root, leaf));
+			task = setOfConditions[random.nextInt(setOfConditions.length)];
+		} while (rootHasNode(root, task));
 
-		if (random.nextInt(100) < 10)
-			return new Inverter(leaf);
-		return leaf;
+		return new Leaf(task, (random.nextInt(100) < 10));
 	}
 
 	private void generateChildren(Composite node)
@@ -155,13 +154,12 @@ public class TreeGenerator
 			node.addChildren(generate(node));
 	}
 
-	private boolean rootHasNode(Composite root, Leaf leaf)
+	private boolean rootHasNode(Composite root, Task leaf)
 	{
 		for (Node n : root.getChildren())
-			if (n.getClass() == leaf.getClass()
-				|| ((n instanceof Inverter)
-					&& ((Inverter) n).getInvertedNode().getClass() == leaf.getClass()))
-				return true;
+			if (n instanceof Leaf)
+				if (((Leaf) n).getTask().getClass() == leaf.getClass())
+					return true;
 		return false;
 	}
 
@@ -179,9 +177,9 @@ public class TreeGenerator
 	{
 		this.rootNode = rootNode;
 	}
-        
-        public ArrayList<Node> getLeaves() 
-        {
-            return leaves;
-        }
+
+	public ArrayList<Leaf> getLeaves()
+	{
+		return leaves;
+	}
 }

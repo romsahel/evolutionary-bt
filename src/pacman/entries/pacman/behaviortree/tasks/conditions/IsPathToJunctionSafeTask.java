@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import pacman.entries.pacman.Junction;
 import pacman.entries.pacman.behaviortree.BTPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants;
 import pacman.game.Game;
 import pacman.game.GameView;
@@ -14,7 +14,7 @@ import pacman.game.GameView;
  * 
  * @author romsahel
  */
-public class IsPathToJunctionSafeTask extends Leaf
+public class IsPathToJunctionSafeTask extends Task
 {
 
 	public static int JUNCTIONS_TO_CHECK = 3;

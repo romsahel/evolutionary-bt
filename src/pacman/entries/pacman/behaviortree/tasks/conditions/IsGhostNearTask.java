@@ -1,7 +1,7 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
 import pacman.entries.pacman.behaviortree.BTPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Game;
 
 /**
@@ -9,7 +9,7 @@ import pacman.game.Game;
  * the specified distance
  * @author romsahel
  */
-public class IsGhostNearTask extends Leaf
+public class IsGhostNearTask extends Task
 {
 
     public static int RUN_DISTANCE = 20;

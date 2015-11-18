@@ -11,6 +11,7 @@ import java.util.Arrays;
  */
 public abstract class Composite extends Node
 {
+
 	/**
 	 * DEBUG constant can be used to output in the console the path taken within
 	 * the tree.
@@ -39,7 +40,7 @@ public abstract class Composite extends Node
 	 * allows a cleaner and indented debug output
 	 *
 	 * @param depth
-	 *            the depth of the node in the tree.
+	 *              the depth of the node in the tree.
 	 */
 	public Composite(int depth)
 	{
@@ -55,7 +56,8 @@ public abstract class Composite extends Node
 	 * Add children to the list
 	 *
 	 * @param nodes
-	 *            children of the current node
+	 *              children of the current node
+	 * <p>
 	 * @return this object, allows for method chaining
 	 */
 	public Composite addChildren(Node... nodes)
@@ -68,6 +70,7 @@ public abstract class Composite extends Node
 	{
 		return children.size();
 	}
+
 	public ArrayList<Node> getChildren()
 	{
 		return children;
@@ -89,22 +92,19 @@ public abstract class Composite extends Node
 	{
 		this.maxDepth = maxDepth;
 	}
-        
-        
-        public Composite copy()
-        {
-            Composite newRoot = (this instanceof Selector) ? new Selector() : new Sequence();
-            newRoot.maxDepth = maxDepth;
-            newRoot.nbChildren = nbChildren;
 
-            for (Node c : this.getChildren()) 
-            {
-                if (c instanceof Composite)
-                    newRoot.addChildren(((Composite)c).copy());
-                else
-                    newRoot.addChildren(c);
-            }
-            
-            return newRoot;
-        }
+	public Composite copy()
+	{
+		Composite newRoot = (this instanceof Selector) ? new Selector() : new Sequence();
+		newRoot.maxDepth = maxDepth;
+		newRoot.nbChildren = nbChildren;
+
+		for (Node c : this.getChildren())
+			if (c instanceof Composite)
+				newRoot.addChildren(((Composite) c).copy());
+			else
+				newRoot.addChildren(c);
+
+		return newRoot;
+	}
 }

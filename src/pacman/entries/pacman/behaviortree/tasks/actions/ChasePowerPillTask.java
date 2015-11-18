@@ -1,7 +1,7 @@
 package pacman.entries.pacman.behaviortree.tasks.actions;
 
 import pacman.entries.pacman.behaviortree.BTPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants;
 import pacman.game.Game;
 
@@ -10,7 +10,7 @@ import pacman.game.Game;
  * <p>
  * @author romsahel
  */
-public class ChasePowerPillTask extends Leaf
+public class ChasePowerPillTask extends Task
 {
 
 	public ChasePowerPillTask(BTPacMan parent)

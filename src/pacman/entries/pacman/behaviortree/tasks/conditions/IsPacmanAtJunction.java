@@ -1,7 +1,7 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
 import pacman.entries.pacman.behaviortree.BTPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Game;
 
 /**
@@ -9,7 +9,7 @@ import pacman.game.Game;
  * 
  * @author romsahel
  */
-public class IsPacmanAtJunction extends Leaf
+public class IsPacmanAtJunction extends Task
 {
 
 	public static int JUNCTIONS_TO_CHECK = 3;

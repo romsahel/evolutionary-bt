@@ -3,6 +3,11 @@ package pacman.entries.pacman.behaviortree;
 import pacman.controllers.Controller;
 import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
+import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Node;
+import pacman.entries.pacman.behaviortree.helpers.Selector;
+import pacman.entries.pacman.behaviortree.helpers.Sequence;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
@@ -33,6 +38,39 @@ public class BTPacMan extends Controller<MOVE>
 	public BTPacMan()
 	{
 		this.rootNode = treeGenerator.generate();
+	}
+
+	public BTPacMan(BTPacMan copy)
+	{
+		this.rootNode = copy(copy.getRootNode());
+		treeGenerator.setRoot(this.rootNode);
+	}
+
+	private Composite copy(Composite copy)
+	{
+		Composite newRoot = (copy instanceof Selector) ? new Selector() : new Sequence();
+
+		for (Node c : copy.getChildren())
+			if (c instanceof Composite)
+				newRoot.addChildren(copy((Composite) c));
+			else
+			{
+				final Task[] set = (c.type == Node.Type.Action)
+								   ? treeGenerator.setOfActions
+								   : treeGenerator.setOfConditions;
+
+				Leaf leaf = (Leaf)c;
+				for (Task task : set)
+					if (task.getClass() == leaf.getTask().getClass())
+					{
+						final Leaf newLeaf = new Leaf(task, leaf.isInverter());
+						newLeaf.type = c.type;
+						newLeaf.parent = newRoot;
+						newRoot.addChildren(newLeaf);
+						treeGenerator.getLeaves().add(newLeaf);
+					}
+			}
+		return newRoot;
 	}
 
 	@Override

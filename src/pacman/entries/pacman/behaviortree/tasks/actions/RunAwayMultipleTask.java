@@ -1,11 +1,11 @@
 package pacman.entries.pacman.behaviortree.tasks.actions;
 
 import pacman.entries.pacman.behaviortree.BTPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants.*;
 import pacman.game.Game;
 
-public class RunAwayMultipleTask extends Leaf {
+public class RunAwayMultipleTask extends Task {
     public RunAwayMultipleTask(BTPacMan parent)
     {
         super(parent);

@@ -11,16 +11,16 @@ public abstract class Node
 {
     public enum Type
     {
-        Composite, 
+        Composite,
         Condition,
         Action,
     }
     public Type type = Type.Composite;
     public Composite parent = null;
-    
+
     private int depth;
     public abstract boolean DoAction(Game game);
-	
+
     public int getDepth()
 	{
 		return depth;

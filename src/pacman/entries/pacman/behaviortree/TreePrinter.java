@@ -9,10 +9,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import pacman.entries.pacman.behaviortree.helpers.Composite;
-import pacman.entries.pacman.behaviortree.helpers.Inverter;
 import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.entries.pacman.behaviortree.helpers.Node;
 import pacman.entries.pacman.behaviortree.helpers.Selector;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 
 /**
  *
@@ -21,57 +21,71 @@ import pacman.entries.pacman.behaviortree.helpers.Selector;
 public class TreePrinter
 {
 
-	private static List<Leaf> setOfConditions;
+	private static List<Task> setOfConditions;
+	private static HashMap<String, Integer> map = new HashMap<>();
+	private static boolean hasBeenCalled = false;
 
 	private TreePrinter()
 	{
 	}
 
-	public void print(Composite root, Leaf[] setOfConditions)
+	public void print(Composite root, Task[] setOfConditions)
 	{
+		if (!hasBeenCalled)
+		{
+			hasBeenCalled = true;
+			System.out.println("#lineWidth: 2\n" + "#padding: 12\n" + "#arrowSize: 0.7\n");
+		}
+		
 		TreePrinter.setOfConditions = Arrays.asList(setOfConditions);
-		System.out.println("#lineWidth: 2\n" + "#padding: 12\n" + "#arrowSize: 0.7\n");
-		HashMap<String, Integer> map = new HashMap<>();
-		final int nodeId = getId(map, root.getClass().getSimpleName());
-		System.out.println("[" + getClassifier(root) + root.getClass().getSimpleName() + " " + nodeId + "]");
-		printTree(map, root, nodeId);
+		final int nodeId = getId(root.getClass().getSimpleName());
+		System.out.println("[" + getClassifier(root) + " " + nodeId + "]");
+		printTree(root, nodeId);
 	}
 
-	private void printTree(HashMap<String, Integer> map, Composite root, int id)
+	private void printTree(Composite root, int id)
 	{
 		for (Node node : root.getChildren())
 		{
-			int nodeId = getId(map, node.getClass().getSimpleName());
-			if (node.getClass() == Inverter.class)
-				System.out.println("[" + root.getClass().getSimpleName() + " " + id + "] -> [NOT "
-								   + ((Inverter) node).getInvertedNode().getClass().getSimpleName() + " " + nodeId + "]");
-			else
-				System.out.println("[" + root.getClass().getSimpleName() + " " + id + "] -> ["
-								   + getClassifier(node) + node.getClass().getSimpleName() + " " + nodeId + "]");
+			int nodeId = getId(node.getClass().getSimpleName());
+			System.out.println("[" + root.getClass().getSimpleName() + " " + id + "] -> " + nodeToString(node, nodeId));
 
 			if (node instanceof Composite)
 			{
 				Composite composite = (Composite) node;
-				printTree(map, composite, nodeId);
+				printTree(composite, nodeId);
 			}
 		}
+	}
+
+	private String nodeToString(Node node, int nodeId)
+	{
+		return "[" + getClassifier(node) + " " + nodeId + "]";
 	}
 
 	private String getClassifier(Node node)
 	{
 		String classifier = "";
 		if (node instanceof Composite)
+		{
 			if (node.getClass() == Selector.class)
 				classifier = "<choice> ";
 			else
 				classifier = "<state> ";
-		else if (setOfConditions.contains((Leaf) node))
-			classifier = "<abstract> ";
-
+			classifier += node.getClass().getSimpleName();
+		}
+		else
+		{
+			final Leaf leaf = (Leaf) node;
+			if (setOfConditions.contains(leaf.getTask()))
+				classifier = "<abstract> ";
+			classifier += (leaf.isInverter()) ? "NOT " : "";
+			classifier += leaf.getTask().getClass().getSimpleName();
+		}
 		return classifier;
 	}
 
-	private int getId(HashMap<String, Integer> map, String key)
+	private int getId(String key)
 	{
 		int id = 0;
 		if (map.containsKey(key))

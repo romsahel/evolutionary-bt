@@ -231,8 +231,8 @@ public final class Trainer
 		public EvolvingBTPacMan call() throws Exception
 		{
 			EvolvingBTPacMan newPacMan = current;
-			if (prev != null)
-				newPacMan = new EvolvingBTPacMan(prev, current);
+//			if (prev != null)
+//				newPacMan = new EvolvingBTPacMan(prev, current);
 
 			runExperiment(newPacMan, numTrials);
 			return newPacMan;

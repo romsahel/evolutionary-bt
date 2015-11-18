@@ -1,7 +1,7 @@
 package pacman.entries.pacman.behaviortree.tasks.actions;
 
 import pacman.entries.pacman.behaviortree.BTPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants;
 import pacman.game.Game;
 
@@ -9,7 +9,7 @@ import pacman.game.Game;
  * Action task: sets the next move to chase the nearest ghost
  * @author romsahel
  */
-public class ChaseTask extends Leaf
+public class ChaseTask extends Task
 {
 
     public ChaseTask(BTPacMan parent)

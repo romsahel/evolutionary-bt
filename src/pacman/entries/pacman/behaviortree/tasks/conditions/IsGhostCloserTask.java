@@ -1,7 +1,7 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
 import pacman.entries.pacman.behaviortree.BTPacMan;
-import pacman.entries.pacman.behaviortree.helpers.Leaf;
+import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants.DM;
 import pacman.game.Game;
 
@@ -10,7 +10,7 @@ import pacman.game.Game;
  * 
  * @author romsahel
  */
-public class IsGhostCloserTask extends Leaf
+public class IsGhostCloserTask extends Task
 {
 
 	public IsGhostCloserTask(BTPacMan parent)
