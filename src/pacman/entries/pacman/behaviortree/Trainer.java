@@ -1,8 +1,3 @@
-	/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman.entries.pacman.behaviortree;
 
 import java.io.FileInputStream;
@@ -50,20 +45,21 @@ public final class Trainer
 
 	public EvolvingBTPacMan train()
 	{
-		System.out.println("Load population from file...");
-		deserializePopulation();
-		System.out.println("Creating population...");
+		System.out.println("Training of " + numIterations + " iterations with " + numTrials + " trials.");
+		System.out.println("Creating population of " + populationSize + " individuals...");
 		while (population.size() < populationSize)
 			experimentAndAddPacMan(new EvolvingBTPacMan());
-
+		System.out.println("Population created.");
 		for (int i = 1; i < numIterations + 1; i++)
 		{
 			population = processPopulation(population);
-
 			System.out.println("It " + i + ": population size = " + population.size() + " -- best: " + (population.first().getScore() / numTrials));
+			population.first().print();
 //			System.out.println(Double.toString((population.first().getScore() / numTrials)).replace(".", ","));
 		}
+
 		serializePopulation();
+		deserializePopulation();
 
 		bestPacMan = population.first();
 		return bestPacMan;
@@ -84,7 +80,7 @@ public final class Trainer
 		int threads = Runtime.getRuntime().availableProcessors();
 		ExecutorService service = Executors.newFixedThreadPool(threads);
 
-		List<Future<EvolvingBTPacMan>> futures = new ArrayList<>();
+		List<Future<EvolvingBTPacMan[]>> futures = new ArrayList<>();
 		EvolvingBTPacMan prev = null;
 		counter = 0;
 
@@ -93,27 +89,25 @@ public final class Trainer
 			// We combine 2-by-2 the best individuals of the population to
 			// create offspring
 			if (prev != null)
-			{
-				counter++;
 				futures.add(service.submit(new ExperimentRunner(input, prev)));
-			}
 			// We keep and re-experiment on the best individuals of the
 			// population
 			futures.add(service.submit(new ExperimentRunner(input)));
 			counter++;
 
 			prev = input;
-			if (counter >= populationSize)
+			if (counter >= populationSize / 2)
 				break;
 		}
-
 		service.shutdown();
 
 		TreeSet<EvolvingBTPacMan> outputs = new TreeSet<>();
-		for (Future<EvolvingBTPacMan> future : futures)
+		for (Future<EvolvingBTPacMan[]> future : futures)
 			try
 			{
-				outputs.add(future.get());
+				for (EvolvingBTPacMan result : future.get())
+					if (result != null)
+						outputs.add(result);
 			} catch (InterruptedException | ExecutionException e)
 			{
 				e.printStackTrace();
@@ -184,6 +178,7 @@ public final class Trainer
 	 */
 	private void deserializePopulation()
 	{
+		System.out.println("Load population from file...");
 		population = new TreeSet<>();
 		FileInputStream fis;
 		try
@@ -209,7 +204,7 @@ public final class Trainer
 
 	}
 
-	private class ExperimentRunner implements Callable<EvolvingBTPacMan>
+	private class ExperimentRunner implements Callable<EvolvingBTPacMan[]>
 	{
 
 		private final EvolvingBTPacMan prev;
@@ -228,14 +223,20 @@ public final class Trainer
 		}
 
 		@Override
-		public EvolvingBTPacMan call() throws Exception
+		public EvolvingBTPacMan[] call() throws Exception
 		{
-			EvolvingBTPacMan newPacMan = current;
-//			if (prev != null)
-//				newPacMan = new EvolvingBTPacMan(prev, current);
+			EvolvingBTPacMan[] results;
+			if (prev != null)
+				results = EvolvingBTPacMan.combine(prev, current);
+			else
+				results = new EvolvingBTPacMan[]
+				{
+					current
+				};
 
-			runExperiment(newPacMan, numTrials);
-			return newPacMan;
+			for (EvolvingBTPacMan pacman : results)
+				runExperiment(pacman, numTrials);
+			return results;
 		}
 	}
 }

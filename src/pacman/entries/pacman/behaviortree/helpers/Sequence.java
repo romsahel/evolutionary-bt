@@ -1,14 +1,15 @@
 package pacman.entries.pacman.behaviortree.helpers;
 
+import java.io.Serializable;
 import pacman.game.Game;
 
 /**
- * Represents a sequence node: executes actions 
+ * Represents a sequence node: executes actions
  * for all of the children except if one fails (returns false)
- * 
+ *
  * @author romsahel
  */
-public class Sequence extends Composite
+public class Sequence extends Composite implements Serializable
 {
 
     public Sequence(int depth)

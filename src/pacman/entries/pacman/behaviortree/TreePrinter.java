@@ -36,11 +36,12 @@ public class TreePrinter
 			hasBeenCalled = true;
 			System.out.println("#lineWidth: 2\n" + "#padding: 12\n" + "#arrowSize: 0.7\n");
 		}
-		
+
 		TreePrinter.setOfConditions = Arrays.asList(setOfConditions);
 		final int nodeId = getId(root.getClass().getSimpleName());
 		System.out.println("[" + getClassifier(root) + " " + nodeId + "]");
 		printTree(root, nodeId);
+		System.out.println();
 	}
 
 	private void printTree(Composite root, int id)

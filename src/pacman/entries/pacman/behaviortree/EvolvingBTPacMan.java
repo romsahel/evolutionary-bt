@@ -71,27 +71,44 @@ public class EvolvingBTPacMan extends BTPacMan
 		replaceNode(leaf, new Leaf(newTask, false), mutatedParent.getTreeGenerator().getLeaves());
 	}
 
+	public static EvolvingBTPacMan[] combine(EvolvingBTPacMan parent1, EvolvingBTPacMan parent2)
+	{
+		final boolean isComposite = random.nextBoolean();
+		final EvolvingBTPacMan[] result = combine(parent1, parent2, isComposite);
+		if (result == null)
+			return combine(parent1, parent2, !isComposite);
+		return result;
+	}
+
+	/**
+	 * create two trees from the two parents
+	 * get a random leaf from the parent1: node1
+	 * get a random leaf from the parent2, matching the type of node1: node2
+	 * <p>
+	 * @return
+	 */
 	public static EvolvingBTPacMan[] combine(EvolvingBTPacMan parent1, EvolvingBTPacMan parent2, boolean isComposite)
 	{
-		// create two trees from the two parents
 		final EvolvingBTPacMan[] result = new EvolvingBTPacMan[]
 		{
 			new EvolvingBTPacMan(parent1),
 			new EvolvingBTPacMan(parent2),
 		};
 
-		// get a random leaf from the parent1: node1
 		final ArrayList<? extends Node> list1 = getList(result[0], isComposite);
-		final Node node1 = list1.get(random.nextInt(list1.size()));
-
-		// get a random leaf from the parent2, matching the type of node1: node2
 		final ArrayList<? extends Node> list2 = getList(result[1], isComposite);
+
+		if (list1.size() == 0 || list2.size() == 0)
+			return null;
+
+		final Node node1 = list1.get(random.nextInt(list1.size()));
 		Node node2 = list2.get(random.nextInt(list2.size()));
 
 		if (isComposite)
 			combineComposites(result, (Composite) node1, (Composite) node2, list1, list2);
 		else
 			combineLeaves(result, (Leaf) node1, (Leaf) node2, list1, list2);
+
 		return result;
 	}
 
@@ -105,20 +122,37 @@ public class EvolvingBTPacMan extends BTPacMan
 										  ArrayList<? extends Node> list1,
 										  ArrayList<? extends Node> list2)
 	{
+		trimTree(result[0], node1);
 		Composite newNode2 = result[0].copy(node2);
 		newNode2.parent = node1.parent;
 		replaceNode(node1, newNode2, (ArrayList<Composite>) list1);
 
+		trimTree(result[1], node2);
 		Composite newNode1 = result[1].copy(node1);
 		newNode1.parent = node2.parent;
 		replaceNode(node2, newNode1, (ArrayList<Composite>) list2);
 
+//		printCompositeCombination(node1, node2);
+	}
+
+	private static void printCompositeCombination(Composite node1, Composite node2)
+	{
 		System.out.print(node1.getClass().getSimpleName());
 		System.out.print(" (" + node1.type + ") ");
 		System.out.print(" <--> ");
 		System.out.print(node2.getClass().getSimpleName());
 		System.out.print(" (" + node2.type + ") ");
 		System.out.println();
+	}
+
+	private static void trimTree(EvolvingBTPacMan tree, Composite subtree)
+	{
+		tree.getTreeGenerator().getComposites().remove((Composite) subtree);
+		for (Node child : subtree.getChildren())
+			if (child.type == Node.Type.Composite)
+				trimTree(tree, (Composite) child);
+			else
+				tree.getTreeGenerator().getLeaves().remove((Leaf) child);
 	}
 
 	private static void combineLeaves(final EvolvingBTPacMan[] result,
@@ -129,17 +163,22 @@ public class EvolvingBTPacMan extends BTPacMan
 		while (node2.type != node1.type || node2.getTask().getClass() == node1.getTask().getClass())
 			node2 = (Leaf) leaves2.get(random.nextInt(leaves2.size()));
 
+//		printLeaveCombination(node1, node2);
+
+		// replace node1 by node2 in result[0] (copy of parent1)
+		replaceNode(node1, new Leaf(node2, node1.parent, result[0]), (ArrayList<Leaf>) leaves1);
+		// replace node2 by node1 in result[1] (copy of parent2)
+		replaceNode(node2, new Leaf(node1, node2.parent, result[1]), (ArrayList<Leaf>) leaves2);
+	}
+
+	private static void printLeaveCombination(Leaf node1, Leaf node2)
+	{
 		System.out.print(((node1.isInverter()) ? "NOT " : "") + node1.getTask().getClass().getSimpleName());
 		System.out.print(" (" + node1.type + ") ");
 		System.out.print(" <--> ");
 		System.out.print(((node2.isInverter()) ? "NOT " : "") + node2.getTask().getClass().getSimpleName());
 		System.out.print(" (" + node2.type + ") ");
 		System.out.println();
-
-		// replace node1 by node2 in result[0] (copy of parent1)
-		replaceNode(node1, new Leaf(node2, node1.parent, result[0]), (ArrayList<Leaf>) leaves1);
-		// replace node2 by node1 in result[1] (copy of parent2)
-		replaceNode(node2, new Leaf(node1, node2.parent, result[1]), (ArrayList<Leaf>) leaves2);
 	}
 
 	/**
@@ -154,7 +193,9 @@ public class EvolvingBTPacMan extends BTPacMan
 			if (children.get(i) == node1)
 			{
 				children.set(i, node2);
-				list.set(list.indexOf(node1), node2);
+				final int index = list.indexOf(node1);
+				if (index > -1)
+					list.set(index, node2);
 				break;
 			}
 	}

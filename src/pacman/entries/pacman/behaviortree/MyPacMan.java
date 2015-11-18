@@ -23,7 +23,10 @@ public class MyPacMan extends Controller<MOVE>
 
 	public MyPacMan()
 	{
-		Trainer trainer = new Trainer(100, 100, 10);
+		int numIterations = 25;
+		int populationSize = 25;
+		int numTrials = 10;
+		Trainer trainer = new Trainer(numIterations, populationSize, numTrials);
 		bestIndividual = trainer.train();
 		bestIndividual.print();
 	}
@@ -31,8 +34,8 @@ public class MyPacMan extends Controller<MOVE>
 	@Override
 	public MOVE getMove(Game game, long timeDue)
 	{
-		bestIndividual.getMove(game, timeDue);
-		return move;
+		return bestIndividual.getMove(game, timeDue);
+//		return move;
 	}
 
 	/**
