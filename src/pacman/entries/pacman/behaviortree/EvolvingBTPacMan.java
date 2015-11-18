@@ -68,7 +68,7 @@ public class EvolvingBTPacMan extends BTPacMan
 		while (newTask.equals(leaf.getTask()))
 			newTask = set[random.nextInt(set.length)];
 
-		replaceLeaf(leaf, new Leaf(newTask, false), mutatedParent.getTreeGenerator().getLeaves());
+		replaceNode(leaf, new Leaf(newTask, false), mutatedParent.getTreeGenerator().getLeaves());
 	}
 
 	public static EvolvingBTPacMan[] combine(EvolvingBTPacMan parent1, EvolvingBTPacMan parent2, boolean isComposite)
@@ -89,7 +89,7 @@ public class EvolvingBTPacMan extends BTPacMan
 		Node node2 = list2.get(random.nextInt(list2.size()));
 
 		if (isComposite)
-			combineComposites((Composite) node1, (Composite) node2, list1, list2);
+			combineComposites(result, (Composite) node1, (Composite) node2, list1, list2);
 		else
 			combineLeaves(result, (Leaf) node1, (Leaf) node2, list1, list2);
 		return result;
@@ -100,11 +100,25 @@ public class EvolvingBTPacMan extends BTPacMan
 		return (isComposite) ? bt.getTreeGenerator().getComposites() : bt.getTreeGenerator().getLeaves();
 	}
 
-	private static void combineComposites(Composite node1, Composite node2,
+	private static void combineComposites(final EvolvingBTPacMan[] result,
+										  Composite node1, Composite node2,
 										  ArrayList<? extends Node> list1,
 										  ArrayList<? extends Node> list2)
 	{
+		Composite newNode2 = result[0].copy(node2);
+		newNode2.parent = node1.parent;
+		replaceNode(node1, newNode2, (ArrayList<Composite>) list1);
 
+		Composite newNode1 = result[1].copy(node1);
+		newNode1.parent = node2.parent;
+		replaceNode(node2, newNode1, (ArrayList<Composite>) list2);
+
+		System.out.print(node1.getClass().getSimpleName());
+		System.out.print(" (" + node1.type + ") ");
+		System.out.print(" <--> ");
+		System.out.print(node2.getClass().getSimpleName());
+		System.out.print(" (" + node2.type + ") ");
+		System.out.println();
 	}
 
 	private static void combineLeaves(final EvolvingBTPacMan[] result,
@@ -115,10 +129,17 @@ public class EvolvingBTPacMan extends BTPacMan
 		while (node2.type != node1.type || node2.getTask().getClass() == node1.getTask().getClass())
 			node2 = (Leaf) leaves2.get(random.nextInt(leaves2.size()));
 
+		System.out.print(((node1.isInverter()) ? "NOT " : "") + node1.getTask().getClass().getSimpleName());
+		System.out.print(" (" + node1.type + ") ");
+		System.out.print(" <--> ");
+		System.out.print(((node2.isInverter()) ? "NOT " : "") + node2.getTask().getClass().getSimpleName());
+		System.out.print(" (" + node2.type + ") ");
+		System.out.println();
+
 		// replace node1 by node2 in result[0] (copy of parent1)
-		replaceLeaf(node1, new Leaf(node2, node1.parent, result[0]), (ArrayList<Leaf>) leaves1);
+		replaceNode(node1, new Leaf(node2, node1.parent, result[0]), (ArrayList<Leaf>) leaves1);
 		// replace node2 by node1 in result[1] (copy of parent2)
-		replaceLeaf(node2, new Leaf(node1, node2.parent, result[1]), (ArrayList<Leaf>) leaves2);
+		replaceNode(node2, new Leaf(node1, node2.parent, result[1]), (ArrayList<Leaf>) leaves2);
 	}
 
 	/**
@@ -126,21 +147,14 @@ public class EvolvingBTPacMan extends BTPacMan
 	 * Go through node1's parent's list of children until node1 is found, removes it and add node2 in its
 	 * place
 	 */
-	private static void replaceLeaf(final Leaf node1, final Leaf node2, final ArrayList<Leaf> leaves)
+	private static <T extends Node> void replaceNode(final T node1, final T node2, final ArrayList<T> list)
 	{
-		System.out.print(((node1.isInverter()) ? "NOT " : "") + node1.getTask().getClass().getSimpleName());
-		System.out.print(" (" + node1.type + ") ");
-		System.out.print(" --> ");
-		System.out.print(((node2.isInverter()) ? "NOT " : "") + node2.getTask().getClass().getSimpleName());
-		System.out.print(" (" + node2.type + ") ");
-		System.out.println();
-
 		final ArrayList<Node> children = node1.parent.getChildren();
 		for (int i = 0; i < children.size(); i++)
 			if (children.get(i) == node1)
 			{
 				children.set(i, node2);
-				leaves.set(leaves.indexOf(node1), node2);
+				list.set(list.indexOf(node1), node2);
 				break;
 			}
 	}

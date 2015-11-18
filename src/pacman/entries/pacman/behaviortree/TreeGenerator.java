@@ -123,6 +123,7 @@ public class TreeGenerator
 		else
 		{
 			final Composite newComposite = generateComposite(type, root);
+			newComposite.parent = root;
 			composites.add(newComposite);
 			return newComposite;
 		}

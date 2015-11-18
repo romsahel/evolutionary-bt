@@ -46,20 +46,25 @@ public class BTPacMan extends Controller<MOVE>
 		treeGenerator.setRoot(this.rootNode);
 	}
 
-	private Composite copy(Composite copy)
+	protected Composite copy(Composite copy)
 	{
 		Composite newRoot = (copy instanceof Selector) ? new Selector() : new Sequence();
 
 		for (Node c : copy.getChildren())
 			if (c instanceof Composite)
-				newRoot.addChildren(copy((Composite) c));
+			{
+				final Composite root = copy((Composite) c);
+				root.parent = newRoot;
+				treeGenerator.getComposites().add(root);
+				newRoot.addChildren(root);
+			}
 			else
 			{
 				final Task[] set = (c.type == Node.Type.Action)
 								   ? treeGenerator.setOfActions
 								   : treeGenerator.setOfConditions;
 
-				Leaf leaf = (Leaf)c;
+				Leaf leaf = (Leaf) c;
 				for (Task task : set)
 					if (task.getClass() == leaf.getTask().getClass())
 					{
