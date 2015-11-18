@@ -36,8 +36,8 @@ public final class Trainer
 	private final int numTrials;
 	// private static final int DEATH_RATE = POPULATION / 4;
 
-	private TreeSet<BTPacMan> population;
-	private BTPacMan bestPacMan;
+	private TreeSet<EvolvingBTPacMan> population;
+	private EvolvingBTPacMan bestPacMan;
 	private int counter;
 
 	public Trainer(int numIterations, int populationSize, int numTrials)
@@ -48,13 +48,13 @@ public final class Trainer
 		this.numTrials = numTrials;
 	}
 
-	public BTPacMan train()
+	public EvolvingBTPacMan train()
 	{
 		System.out.println("Load population from file...");
 		deserializePopulation();
 		System.out.println("Creating population...");
 		while (population.size() < populationSize)
-			experimentAndAddPacMan(new BTPacMan());
+			experimentAndAddPacMan(new EvolvingBTPacMan());
 
 		for (int i = 1; i < numIterations + 1; i++)
 		{
@@ -79,16 +79,16 @@ public final class Trainer
 	 *               <p>
 	 * @return
 	 */
-	public TreeSet<BTPacMan> processPopulation(TreeSet<BTPacMan> inputs)
+	public TreeSet<EvolvingBTPacMan> processPopulation(TreeSet<EvolvingBTPacMan> inputs)
 	{
 		int threads = Runtime.getRuntime().availableProcessors();
 		ExecutorService service = Executors.newFixedThreadPool(threads);
 
-		List<Future<BTPacMan>> futures = new ArrayList<>();
-		BTPacMan prev = null;
+		List<Future<EvolvingBTPacMan>> futures = new ArrayList<>();
+		EvolvingBTPacMan prev = null;
 		counter = 0;
 
-		for (final BTPacMan input : inputs)
+		for (final EvolvingBTPacMan input : inputs)
 		{
 			// We combine 2-by-2 the best individuals of the population to
 			// create offspring
@@ -109,8 +109,8 @@ public final class Trainer
 
 		service.shutdown();
 
-		TreeSet<BTPacMan> outputs = new TreeSet<>();
-		for (Future<BTPacMan> future : futures)
+		TreeSet<EvolvingBTPacMan> outputs = new TreeSet<>();
+		for (Future<EvolvingBTPacMan> future : futures)
 			try
 			{
 				outputs.add(future.get());
@@ -124,7 +124,7 @@ public final class Trainer
 	/**
 	 *
 	 */
-	private void experimentAndAddPacMan(BTPacMan newPacMan)
+	private void experimentAndAddPacMan(EvolvingBTPacMan newPacMan)
 	{
 		runExperiment(newPacMan, numTrials);
 		population.add(newPacMan);
@@ -136,7 +136,7 @@ public final class Trainer
 	 * @param pacman
 	 * @param trials
 	 */
-	public void runExperiment(BTPacMan pacman, int trials)
+	public void runExperiment(EvolvingBTPacMan pacman, int trials)
 	{
 		double avgScore = 0;
 
@@ -168,7 +168,7 @@ public final class Trainer
 			fos = new FileOutputStream("population.ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeInt(population.size());
-			for (BTPacMan pacman : population)
+			for (EvolvingBTPacMan pacman : population)
 				oos.writeObject(pacman.getRootNode());
 			oos.close();
 			fos.close();
@@ -193,7 +193,7 @@ public final class Trainer
 			{
 				int n = iis.readInt();
 				for (int i = 0; i < n; i++)
-					experimentAndAddPacMan(new BTPacMan((Composite) iis.readObject()));
+					experimentAndAddPacMan(new EvolvingBTPacMan((Composite) iis.readObject()));
 			}
 			fis.close();
 		} catch (IOException | ClassNotFoundException e)
@@ -203,36 +203,36 @@ public final class Trainer
 		System.out.println("Population: " + population.size() + "/" + populationSize);
 	}
 
-	public BTPacMan getBestPacMan()
+	public EvolvingBTPacMan getBestPacMan()
 	{
 		return bestPacMan;
 
 	}
 
-	private class ExperimentRunner implements Callable<BTPacMan>
+	private class ExperimentRunner implements Callable<EvolvingBTPacMan>
 	{
 
-		private final BTPacMan prev;
-		private final BTPacMan current;
+		private final EvolvingBTPacMan prev;
+		private final EvolvingBTPacMan current;
 
-		public ExperimentRunner(BTPacMan current)
+		public ExperimentRunner(EvolvingBTPacMan current)
 		{
 			this.current = current;
 			this.prev = null;
 		}
 
-		public ExperimentRunner(BTPacMan current, BTPacMan prev)
+		public ExperimentRunner(EvolvingBTPacMan current, EvolvingBTPacMan prev)
 		{
 			this.current = current;
 			this.prev = prev;
 		}
 
 		@Override
-		public BTPacMan call() throws Exception
+		public EvolvingBTPacMan call() throws Exception
 		{
-			BTPacMan newPacMan = current;
+			EvolvingBTPacMan newPacMan = current;
 			if (prev != null)
-				newPacMan = new BTPacMan(prev, current);
+				newPacMan = new EvolvingBTPacMan(prev, current);
 
 			runExperiment(newPacMan, numTrials);
 			return newPacMan;
