@@ -53,14 +53,14 @@ public class EvolvingBTPacMan extends BTPacMan
 				mutatedParent.treeGenerator.getLeaves().remove(index);
 			}
 			else
-				switchLeaf(mutatedParent.treeGenerator.setOfConditions, leaf, mutatedParent, index);
+				switchLeaf(mutatedParent.treeGenerator.setOfConditions, leaf, mutatedParent);
 		else
-			switchLeaf(mutatedParent.treeGenerator.setOfActions, leaf, mutatedParent, index);
+			switchLeaf(mutatedParent.treeGenerator.setOfActions, leaf, mutatedParent);
 
 		return mutatedParent;
 	}
 
-	private static void switchLeaf(final Leaf[] set, Node leaf, BTPacMan mutatedParent, int index)
+	private static void switchLeaf(final Leaf[] set, Node leaf, BTPacMan mutatedParent)
 	{
 		Leaf newLeaf = set[random.nextInt(set.length)];
 		while (newLeaf.equals(leaf))
