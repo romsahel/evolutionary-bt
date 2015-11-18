@@ -51,6 +51,7 @@ public class TreeGenerator
 	private Composite rootNode;
 	public final Task[] setOfActions, setOfConditions;
 	private final ArrayList<Leaf> leaves = new ArrayList<>();
+	private final ArrayList<Composite> composites = new ArrayList<>();
 
 	private static final Random random = new Random();
 
@@ -103,27 +104,31 @@ public class TreeGenerator
 
 		if (type == LEAF_TYPE)
 		{
-			Leaf leaf;
+			Leaf newLeaf;
 			if (root.getChildrenCount() == root.nbChildren - 1)
 			{
-				leaf = new Leaf(setOfActions[random.nextInt(setOfActions.length)], false);
-				leaf.type = Node.Type.Action;
+				newLeaf = new Leaf(setOfActions[random.nextInt(setOfActions.length)], false);
+				newLeaf.type = Node.Type.Action;
 			}
 			else
 			{
-				leaf = generateCondition(root);
-				leaf.type = Node.Type.Condition;
+				newLeaf = generateCondition(root);
+				newLeaf.type = Node.Type.Condition;
 			}
 
-			leaves.add(leaf);
-			leaf.parent = root;
-			return leaf;
+			leaves.add(newLeaf);
+			newLeaf.parent = root;
+			return newLeaf;
 		}
 		else
-			return generateComposite(type, root);
+		{
+			final Composite newComposite = generateComposite(type, root);
+			composites.add(newComposite);
+			return newComposite;
+		}
 	}
 
-	private Node generateComposite(int type, Composite root)
+	private Composite generateComposite(int type, Composite root)
 	{
 		Composite node;
 		if (type == SELECTOR_TYPE)
@@ -181,5 +186,13 @@ public class TreeGenerator
 	public ArrayList<Leaf> getLeaves()
 	{
 		return leaves;
+	}
+
+	/**
+	 * @return the composites
+	 */
+	public ArrayList<Composite> getComposites()
+	{
+		return composites;
 	}
 }

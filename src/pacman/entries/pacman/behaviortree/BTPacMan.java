@@ -20,7 +20,7 @@ public class BTPacMan extends Controller<MOVE>
 
 	final Composite rootNode;
 	final GameState state = new GameState();
-	final TreeGenerator treeGenerator = new TreeGenerator(this);
+	private final TreeGenerator treeGenerator = new TreeGenerator(this);
 	double score;
 
 
@@ -122,5 +122,13 @@ public class BTPacMan extends Controller<MOVE>
 	public void print()
 	{
 		treeGenerator.print();
+	}
+
+	/**
+	 * @return the treeGenerator
+	 */
+	public TreeGenerator getTreeGenerator()
+	{
+		return treeGenerator;
 	}
 }

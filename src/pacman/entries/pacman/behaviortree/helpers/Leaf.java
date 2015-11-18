@@ -5,6 +5,8 @@
  */
 package pacman.entries.pacman.behaviortree.helpers;
 
+import pacman.entries.pacman.behaviortree.BTPacMan;
+import pacman.entries.pacman.behaviortree.TreeGenerator;
 import pacman.game.Game;
 
 /**
@@ -20,6 +22,24 @@ public class Leaf extends Node
 	{
 		this.task = task;
 		this.isInverter = isInverter;
+	}
+
+	public Leaf(Leaf copy, Composite parent, BTPacMan tree)
+	{
+		this.isInverter = copy.isInverter;
+		this.type = copy.type;
+		this.parent = parent;
+
+		final TreeGenerator treeGenerator = tree.getTreeGenerator();
+		Task[] set = (this.type == Type.Action) ? treeGenerator.setOfActions : treeGenerator.setOfConditions;
+		Task tmp = null;
+		for (Task t : set)
+			if (t.getClass() == copy.task.getClass())
+			{
+				tmp = t;
+				break;
+			}
+		this.task = tmp;
 	}
 
 	@Override
