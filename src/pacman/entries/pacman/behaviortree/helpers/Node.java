@@ -7,7 +7,7 @@ import pacman.game.Game;
  * The node. Every classes that are part of the tree should inherit from this one
  * @author romsahel
  */
-public abstract class Node
+public abstract class Node implements java.io.Serializable
 {
     public enum Type
     {

@@ -1,6 +1,5 @@
 package pacman.entries.pacman.behaviortree.helpers;
 
-import java.io.Serializable;
 import pacman.game.Game;
 
 /**
@@ -9,27 +8,26 @@ import pacman.game.Game;
  *
  * @author romsahel
  */
-public class Sequence extends Composite implements Serializable
+public class Sequence extends Composite implements java.io.Serializable
 {
 
-    public Sequence(int depth)
-    {
-        super(depth);
-    }
+	public Sequence(int depth)
+	{
+		super(depth);
+	}
 
-    public Sequence()
-    {
-    }
-
+	public Sequence()
+	{
+	}
 
 	@Override
 	public boolean DoAction(Game game)
 	{
 		for (Node child : children)
 		{
-				printDebug(child, true);
-				final boolean result = child.DoAction(game);
-				printDebug(child, false);
+			printDebug(child, true);
+			final boolean result = child.DoAction(game);
+			printDebug(child, false);
 
 			if (!result)
 				return false;

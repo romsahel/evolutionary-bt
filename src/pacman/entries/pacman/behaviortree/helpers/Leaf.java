@@ -13,7 +13,7 @@ import pacman.game.Game;
  *
  * @author Romsahel
  */
-public class Leaf extends Node
+public class Leaf extends Node implements java.io.Serializable
 {
 	private final Task task;
 	private final boolean isInverter;

@@ -12,7 +12,7 @@ import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class BTPacMan extends Controller<MOVE>
-		implements Comparable<BTPacMan>
+		implements Comparable<BTPacMan>, java.io.Serializable
 {
 	/*
 	 * Root of the behavior tree
@@ -31,7 +31,7 @@ public class BTPacMan extends Controller<MOVE>
 
 	public BTPacMan(Composite rootNode)
 	{
-		this.rootNode = rootNode;
+		this.rootNode = copy(rootNode);
 		treeGenerator.setRoot(this.rootNode);
 	}
 
@@ -40,13 +40,7 @@ public class BTPacMan extends Controller<MOVE>
 		this.rootNode = treeGenerator.generate();
 	}
 
-	public BTPacMan(BTPacMan copy)
-	{
-		this.rootNode = copy(copy.getRootNode());
-		treeGenerator.setRoot(this.rootNode);
-	}
-
-	protected Composite copy(Composite copy)
+	protected final Composite copy(Composite copy)
 	{
 		Composite newRoot = (copy instanceof Selector) ? new Selector() : new Sequence();
 

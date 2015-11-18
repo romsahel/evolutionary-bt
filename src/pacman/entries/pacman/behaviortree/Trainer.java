@@ -50,16 +50,18 @@ public final class Trainer
 		while (population.size() < populationSize)
 			experimentAndAddPacMan(new EvolvingBTPacMan());
 		System.out.println("Population created.");
+
+		population.first().print();
+		serializePopulation();
+		deserializePopulation();
+		population.first().print();
+
 		for (int i = 1; i < numIterations + 1; i++)
 		{
 			population = processPopulation(population);
 			System.out.println("It " + i + ": population size = " + population.size() + " -- best: " + (population.first().getScore() / numTrials));
-			population.first().print();
 //			System.out.println(Double.toString((population.first().getScore() / numTrials)).replace(".", ","));
 		}
-
-		serializePopulation();
-		deserializePopulation();
 
 		bestPacMan = population.first();
 		return bestPacMan;
@@ -178,7 +180,7 @@ public final class Trainer
 	 */
 	private void deserializePopulation()
 	{
-		System.out.println("Load population from file...");
+		System.out.print("Load population from file");
 		population = new TreeSet<>();
 		FileInputStream fis;
 		try
@@ -187,8 +189,14 @@ public final class Trainer
 			try (ObjectInputStream iis = new ObjectInputStream(fis))
 			{
 				int n = iis.readInt();
+				System.out.println(" -- size: " + n + "...");
 				for (int i = 0; i < n; i++)
-					experimentAndAddPacMan(new EvolvingBTPacMan((Composite) iis.readObject()));
+				{
+					final Composite composite = (Composite) iis.readObject();
+					final EvolvingBTPacMan pacman = new EvolvingBTPacMan(composite);
+					experimentAndAddPacMan(pacman);
+					population.add(pacman);
+				}
 			}
 			fis.close();
 		} catch (IOException | ClassNotFoundException e)

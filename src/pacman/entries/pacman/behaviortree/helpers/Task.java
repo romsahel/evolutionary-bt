@@ -8,10 +8,10 @@ import pacman.game.Game;
  *
  * @author romsahel
  */
-public abstract class Task
+public abstract class Task implements java.io.Serializable
 {
-    protected final BTPacMan parent;
-    protected final GameState state;
+    protected transient final BTPacMan parent;
+    protected transient final GameState state;
 
     public Task(BTPacMan parent)
     {

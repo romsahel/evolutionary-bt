@@ -16,7 +16,7 @@ import pacman.entries.pacman.behaviortree.helpers.Task;
  *
  * @author Romsahel
  */
-public class EvolvingBTPacMan extends BTPacMan
+public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 {
 
 	private static final Random random = new Random();
@@ -26,14 +26,13 @@ public class EvolvingBTPacMan extends BTPacMan
 		super(rootNode);
 	}
 
+	public EvolvingBTPacMan(EvolvingBTPacMan copy)
+	{
+		super(copy.rootNode);
+	}
 	public EvolvingBTPacMan()
 	{
 		super();
-	}
-
-	public EvolvingBTPacMan(EvolvingBTPacMan copy)
-	{
-		super(copy);
 	}
 
 	public static EvolvingBTPacMan Mutate(EvolvingBTPacMan parent)

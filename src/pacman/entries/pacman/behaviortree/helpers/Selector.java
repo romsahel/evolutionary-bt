@@ -1,6 +1,5 @@
 package pacman.entries.pacman.behaviortree.helpers;
 
-import java.io.Serializable;
 import pacman.game.Game;
 
 /**
@@ -9,7 +8,7 @@ import pacman.game.Game;
  *
  * @author romsahel
  */
-public class Selector extends Composite implements Serializable
+public class Selector extends Composite implements java.io.Serializable
 {
 
 	public Selector(int depth)

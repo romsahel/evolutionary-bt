@@ -9,7 +9,7 @@ import java.util.Arrays;
  *
  * @author romsahel
  */
-public abstract class Composite extends Node
+public abstract class Composite extends Node implements java.io.Serializable
 {
 
 	/**
