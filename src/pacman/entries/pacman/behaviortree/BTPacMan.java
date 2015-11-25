@@ -20,7 +20,7 @@ public class BTPacMan extends Controller<MOVE>
 	final Composite rootNode;
 	final GameState state = new GameState();
 	private final TreeGenerator treeGenerator = new TreeGenerator();
-	double score;
+	private int score;
 
 
 	/*
@@ -90,7 +90,7 @@ public class BTPacMan extends Controller<MOVE>
 		return score;
 	}
 
-	public void setScore(double score)
+	public void setScore(int score)
 	{
 		this.score = score;
 	}

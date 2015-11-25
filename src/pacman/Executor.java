@@ -46,7 +46,6 @@ public class Executor
 		 * numTrials=10; exec.runExperiment(new RandomPacMan(),new
 		 * RandomGhosts(),numTrials);
 		 */
-
 		/*
 		 * //run a game in synchronous mode: game waits until controllers
 		 * respond. int delay=5; boolean visual=true; exec.runGame(new
@@ -56,8 +55,18 @@ public class Executor
 		// run the game in asynchronous mode.
 		boolean visual = true;
 		Controller<MOVE> pacman = new pacman.entries.pacman.behaviortree.MyPacMan();
-		exec.runGameTimed(pacman, new StarterGhosts(), visual);
-//		exec.runExperiment(pacman, new StarterGhosts(), 2000);
+
+//		exec.runGameTimed(pacman, new StarterGhosts(), visual);
+		exec.runExperiment(pacman, new StarterGhosts(), 2000);
+		//		final EvolvingBTPacMan btPacMan1 = new EvolvingBTPacMan();
+		//		final EvolvingBTPacMan btPacMan2 = new EvolvingBTPacMan();
+		//
+		//		final EvolvingBTPacMan[] combine = EvolvingBTPacMan.combine(btPacMan1, btPacMan2);
+		//
+		//		btPacMan1.print();
+		//		btPacMan2.print();
+		//		combine[0].print();
+		//		combine[1].print();
 
 		// */
 
@@ -68,14 +77,13 @@ public class Executor
 		 * fixedTime=false; exec.runGameTimedSpeedOptimised(new
 		 * RandomPacMan(),new RandomGhosts(),fixedTime,visual);
 		 */
-
 		/*
 		 * //run game in asynchronous mode and record it to file for replay at a
 		 * later stage. boolean visual=true; String fileName="replay.txt";
 		 * exec.runGameTimedRecorded(new HumanController(new
 		 * KeyBoardInput()),new RandomGhosts(),visual,fileName);
 		 * //exec.replayGame(fileName,visual);
-		 */
+		 */;
 	}
 
 	public static GameView publicGameView;

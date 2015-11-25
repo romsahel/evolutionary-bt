@@ -25,7 +25,7 @@ import pacman.game.Game;
  */
 public final class Trainer
 {
-
+	private static final Random rnd = new Random(0);
 	private final int numIterations;
 	private final int populationSize;
 	private final int numTrials;
@@ -164,14 +164,10 @@ public final class Trainer
 	 */
 	public void runExperiment(EvolvingBTPacMan pacman, int trials)
 	{
-		double avgScore = 0;
-
-		Random rnd = new Random(0);
-		Game game;
-
+		int avgScore = 0;
 		for (int i = 0; i < trials; i++)
 		{
-			game = new Game(rnd.nextLong());
+			Game game = new Game(rnd.nextLong());
 
 			while (!game.gameOver())
 				game.advanceGame(pacman.getMove(game.copy(), System.currentTimeMillis() + Constants.DELAY),

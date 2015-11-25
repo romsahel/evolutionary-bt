@@ -1,18 +1,15 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
-import java.awt.Color;
 import pacman.entries.pacman.GameState;
-
 import pacman.entries.pacman.Junction;
 import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants;
 import pacman.game.Game;
-import pacman.game.GameView;
 
 /**
  * A condition task: returns true if a ghost is within the specified distance
- * 
+ *
  * @author romsahel
  */
 public class IsPathToJunctionSafeTask extends Task
@@ -29,10 +26,10 @@ public class IsPathToJunctionSafeTask extends Task
 	public boolean DoAction(Game game, BTPacMan parent, GameState state)
 	{
 		int i = 0;
-		
+
 		if (state.getNearestGhost() == null)
 			return true;
-		
+
 		for (Junction junction : state.getNearestJunctions())
 		{
 			boolean safe = true;
@@ -44,14 +41,14 @@ public class IsPathToJunctionSafeTask extends Task
 					break;
 				}
 			}
-			
+
 			if (safe)
 			{
 				state.setNearestSafeJunction(junction);
 				return true;
 			}
-			GameView.addPoints(game, Color.GREEN, game.getShortestPath(state.getCurrent(), junction.getIndex()));
-			
+//			GameView.addPoints(game, Color.GREEN, game.getShortestPath(state.getCurrent(), junction.getIndex()));
+
 			if (i++ == JUNCTIONS_TO_CHECK)
 				break;
 		}

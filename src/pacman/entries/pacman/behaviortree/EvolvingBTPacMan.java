@@ -164,19 +164,19 @@ public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 									  ArrayList<? extends Node> leaves1,
 									  ArrayList<? extends Node> leaves2)
 	{
-//		ArrayList<Integer> indexes = new ArrayList<>();
-//		for (int i = 0; i < leaves2.size(); i++)
-//			indexes.add(i);
-//
-//		while (node2.type != node1.type || node2.getTask().getClass() == node1.getTask().getClass())
-//		{
-//			if (indexes.isEmpty())
-//				return null;
-//			final int rnd = random.nextInt(indexes.size());
-//			final int index = indexes.get(rnd);
-//			node2 = (Leaf) leaves2.get(index);
-//			indexes.remove(rnd);
-//		}
+		ArrayList<Integer> indexes = new ArrayList<>();
+		for (int i = 0; i < leaves2.size(); i++)
+			indexes.add(i);
+
+		while (node2.type != node1.type || node2.getTask().getClass() == node1.getTask().getClass())
+		{
+			if (indexes.isEmpty())
+				return null;
+			final int rnd = random.nextInt(indexes.size());
+			final int index = indexes.get(rnd);
+			node2 = (Leaf) leaves2.get(index);
+			indexes.remove(rnd);
+		}
 		if (node2.type == node1.type)
 			return null;
 
