@@ -7,7 +7,6 @@ import pacman.entries.pacman.behaviortree.helpers.Leaf;
 import pacman.entries.pacman.behaviortree.helpers.Node;
 import pacman.entries.pacman.behaviortree.helpers.Selector;
 import pacman.entries.pacman.behaviortree.helpers.Sequence;
-import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
@@ -20,7 +19,7 @@ public class BTPacMan extends Controller<MOVE>
 
 	final Composite rootNode;
 	final GameState state = new GameState();
-	private final TreeGenerator treeGenerator = new TreeGenerator(this);
+	private final TreeGenerator treeGenerator = new TreeGenerator();
 	double score;
 
 
@@ -54,20 +53,12 @@ public class BTPacMan extends Controller<MOVE>
 			}
 			else
 			{
-				final Task[] set = (c.type == Node.Type.Action)
-								   ? treeGenerator.setOfActions
-								   : treeGenerator.setOfConditions;
-
 				Leaf leaf = (Leaf) c;
-				for (Task task : set)
-					if (task.getClass() == leaf.getTask().getClass())
-					{
-						final Leaf newLeaf = new Leaf(task, leaf.isInverter());
-						newLeaf.type = c.type;
-						newLeaf.parent = newRoot;
-						newRoot.addChildren(newLeaf);
-						treeGenerator.getLeaves().add(newLeaf);
-					}
+				final Leaf newLeaf = new Leaf(leaf.getTask(), leaf.isInverter());
+				newLeaf.type = c.type;
+				newLeaf.parent = newRoot;
+				newRoot.addChildren(newLeaf);
+				treeGenerator.getLeaves().add(newLeaf);
 			}
 		return newRoot;
 	}
@@ -76,7 +67,7 @@ public class BTPacMan extends Controller<MOVE>
 	public MOVE getMove(Game game, long timeDue)
 	{
 		state.update(game);
-		rootNode.DoAction(game);
+		rootNode.DoAction(game, this, this.getState());
 		return move;
 	}
 

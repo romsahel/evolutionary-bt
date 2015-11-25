@@ -1,5 +1,6 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
+import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Game;
@@ -14,13 +15,13 @@ public class IsPacmanAtJunction extends Task
 
 	public static int JUNCTIONS_TO_CHECK = 3;
 
-	public IsPacmanAtJunction(BTPacMan parent)
+	public IsPacmanAtJunction()
 	{
-		super(parent);
+		super();
 	}
 
 	@Override
-	public boolean DoAction(Game game)
+	public boolean DoAction(Game game, BTPacMan parent, GameState state)
 	{
 		return (state.getNearestJunctions().first().getDistance() < 2);
 	}

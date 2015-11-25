@@ -7,8 +7,6 @@ import pacman.game.Game;
 
 public class MyPacMan extends Controller<MOVE>
 {
-
-
 	/*
 	 * Root of the behavior tree
 	 */
@@ -19,13 +17,11 @@ public class MyPacMan extends Controller<MOVE>
 	/*
 	 * Type of MOVE that will be returned at each game step
 	 */
-	private MOVE move;
-
 	public MyPacMan()
 	{
-		int numIterations = 25;
-		int populationSize = 5;
-		int numTrials = 100;
+		int numIterations = 15;
+		int populationSize = 35;
+		int numTrials = 10;
 		Trainer trainer = new Trainer(numIterations, populationSize, numTrials);
 		bestIndividual = trainer.train();
 		bestIndividual.print();
@@ -35,16 +31,6 @@ public class MyPacMan extends Controller<MOVE>
 	public MOVE getMove(Game game, long timeDue)
 	{
 		return bestIndividual.getMove(game, timeDue);
-//		return move;
-	}
-
-	/**
-	 * @param move
-	 *             the move to set
-	 */
-	public void setMove(MOVE move)
-	{
-		this.move = move;
 	}
 
 	public GameState getState()

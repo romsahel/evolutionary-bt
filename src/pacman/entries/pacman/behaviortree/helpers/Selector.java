@@ -1,5 +1,7 @@
 package pacman.entries.pacman.behaviortree.helpers;
 
+import pacman.entries.pacman.GameState;
+import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.game.Game;
 
 /**
@@ -21,12 +23,12 @@ public class Selector extends Composite implements java.io.Serializable
 	}
 
 	@Override
-	public boolean DoAction(Game game)
+	public boolean DoAction(Game game, BTPacMan parent, GameState state)
 	{
 		for (Node child : children)
 		{
 			printDebug(child, true);
-			final boolean result = child.DoAction(game);
+			final boolean result = child.DoAction(game, parent, state);
 			printDebug(child, false);
 
 			if (result)

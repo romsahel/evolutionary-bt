@@ -1,5 +1,7 @@
 package pacman.entries.pacman.behaviortree.helpers;
 
+import pacman.entries.pacman.GameState;
+import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.game.Game;
 
 /**
@@ -19,7 +21,7 @@ public abstract class Node implements java.io.Serializable
     public Composite parent = null;
 
     private int depth;
-    public abstract boolean DoAction(Game game);
+    public abstract boolean DoAction(Game game, BTPacMan parent, GameState state);
 
     public int getDepth()
 	{

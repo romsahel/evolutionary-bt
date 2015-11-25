@@ -1,6 +1,7 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
 import java.awt.Color;
+import pacman.entries.pacman.GameState;
 
 import pacman.entries.pacman.Junction;
 import pacman.entries.pacman.behaviortree.BTPacMan;
@@ -19,13 +20,13 @@ public class IsPathToJunctionSafeTask extends Task
 
 	public static int JUNCTIONS_TO_CHECK = 3;
 
-	public IsPathToJunctionSafeTask(BTPacMan parent)
+	public IsPathToJunctionSafeTask()
 	{
-		super(parent);
+		super();
 	}
 
 	@Override
-	public boolean DoAction(Game game)
+	public boolean DoAction(Game game, BTPacMan parent, GameState state)
 	{
 		int i = 0;
 		

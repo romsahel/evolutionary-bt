@@ -5,6 +5,7 @@
  */
 package pacman.entries.pacman.behaviortree.helpers;
 
+import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.TreeGenerator;
 import pacman.game.Game;
@@ -29,23 +30,16 @@ public class Leaf extends Node implements java.io.Serializable
 		this.isInverter = copy.isInverter;
 		this.type = copy.type;
 		this.parent = parent;
+		this.task = copy.task;
 
 		final TreeGenerator treeGenerator = tree.getTreeGenerator();
-		Task[] set = (this.type == Type.Action) ? treeGenerator.setOfActions : treeGenerator.setOfConditions;
-		Task tmp = null;
-		for (Task t : set)
-			if (t.getClass() == copy.task.getClass())
-			{
-				tmp = t;
-				break;
-			}
-		this.task = tmp;
+		treeGenerator.getLeaves().add(copy);
 	}
 
 	@Override
-	public boolean DoAction(Game game)
+	public boolean DoAction(Game game, BTPacMan parent, GameState state)
 	{
-		final boolean result = task.DoAction(game);
+		final boolean result = task.DoAction(game, parent, state);
 		return (isInverter) ? !result : result;
 	}
 

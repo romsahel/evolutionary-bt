@@ -29,12 +29,13 @@ import pacman.game.GameView;
 @SuppressWarnings("unused")
 public class Executor
 {
+
 	/**
 	 * The main method. Several options are listed - simply remove comments to
 	 * use the option you want.
 	 *
 	 * @param args
-	 *            the command line arguments
+	 *             the command line arguments
 	 */
 	public static void main(String[] args)
 	{
@@ -51,13 +52,11 @@ public class Executor
 		 * respond. int delay=5; boolean visual=true; exec.runGame(new
 		 * RandomPacMan(),new RandomGhosts(),visual,delay);
 		 */
-
 		/// *
 		// run the game in asynchronous mode.
 		boolean visual = true;
-		 Controller<MOVE> pacman = new pacman.entries.pacman.behaviortree.MyPacMan();
-
-		 exec.runGameTimed(pacman, new StarterGhosts(), visual);
+		Controller<MOVE> pacman = new pacman.entries.pacman.behaviortree.MyPacMan();
+		exec.runGameTimed(pacman, new StarterGhosts(), visual);
 //		exec.runExperiment(pacman, new StarterGhosts(), 2000);
 
 		// */
@@ -90,14 +89,14 @@ public class Executor
 	 * likely to do in the competition.
 	 *
 	 * @param pacManController
-	 *            The Pac-Man controller
+	 *                         The Pac-Man controller
 	 * @param ghostController
-	 *            The Ghosts controller
+	 *                         The Ghosts controller
 	 * @param trials
-	 *            The number of trials to be executed
+	 *                         The number of trials to be executed
 	 */
 	public void runExperiment(Controller<MOVE> pacManController, Controller<EnumMap<GHOST, MOVE>> ghostController,
-	        int trials)
+							  int trials)
 	{
 		double avgScore = 0;
 
@@ -111,10 +110,8 @@ public class Executor
 			game = new Game(rnd.nextLong());
 
 			while (!game.gameOver())
-			{
 				game.advanceGame(pacManController.getMove(game.copy(), System.currentTimeMillis() + DELAY),
-				        ghostController.getMove(game.copy(), System.currentTimeMillis() + DELAY));
-			}
+								 ghostController.getMove(game.copy(), System.currentTimeMillis() + DELAY));
 
 			avgScore += game.getScore();
 			// System.out.println(i + "\t" + game.getScore());
@@ -140,16 +137,16 @@ public class Executor
 	 * should be put as 0.
 	 *
 	 * @param pacManController
-	 *            The Pac-Man controller
+	 *                         The Pac-Man controller
 	 * @param ghostController
-	 *            The Ghosts controller
+	 *                         The Ghosts controller
 	 * @param visual
-	 *            Indicates whether or not to use visuals
+	 *                         Indicates whether or not to use visuals
 	 * @param delay
-	 *            The delay between time-steps
+	 *                         The delay between time-steps
 	 */
 	public void runGame(Controller<MOVE> pacManController, Controller<EnumMap<GHOST, MOVE>> ghostController,
-	        boolean visual, int delay)
+						boolean visual, int delay)
 	{
 		Game game = new Game(0);
 
@@ -164,8 +161,7 @@ public class Executor
 			try
 			{
 				Thread.sleep(delay);
-			}
-			catch (Exception e)
+			} catch (Exception e)
 			{
 			}
 
@@ -180,14 +176,14 @@ public class Executor
 	 * game states.
 	 *
 	 * @param pacManController
-	 *            The Pac-Man controller
+	 *                         The Pac-Man controller
 	 * @param ghostController
-	 *            The Ghosts controller
+	 *                         The Ghosts controller
 	 * @param visual
-	 *            Indicates whether or not to use visuals
+	 *                         Indicates whether or not to use visuals
 	 */
 	public void runGameTimed(Controller<MOVE> pacManController, Controller<EnumMap<GHOST, MOVE>> ghostController,
-	        boolean visual)
+							 boolean visual)
 	{
 		Game game = new Game(0);
 
@@ -211,8 +207,7 @@ public class Executor
 			try
 			{
 				Thread.sleep(DELAY);
-			}
-			catch (InterruptedException e)
+			} catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
@@ -233,17 +228,17 @@ public class Executor
 	 * 40ms regardless of whether the controllers managed to calculate a turn.
 	 *
 	 * @param pacManController
-	 *            The Pac-Man controller
+	 *                         The Pac-Man controller
 	 * @param ghostController
-	 *            The Ghosts controller
+	 *                         The Ghosts controller
 	 * @param fixedTime
-	 *            Whether or not to wait until 40ms are up even if both
-	 *            controllers already responded
+	 *                         Whether or not to wait until 40ms are up even if both
+	 *                         controllers already responded
 	 * @param visual
-	 *            Indicates whether or not to use visuals
+	 *                         Indicates whether or not to use visuals
 	 */
 	public void runGameTimedSpeedOptimised(Controller<MOVE> pacManController,
-	        Controller<EnumMap<GHOST, MOVE>> ghostController, boolean fixedTime, boolean visual)
+										   Controller<EnumMap<GHOST, MOVE>> ghostController, boolean fixedTime, boolean visual)
 	{
 		Game game = new Game(0);
 
@@ -282,8 +277,7 @@ public class Executor
 					Thread.sleep(((DELAY / INTERVAL_WAIT) - waited) * INTERVAL_WAIT);
 
 				game.advanceGame(pacManController.getMove(), ghostController.getMove());
-			}
-			catch (InterruptedException e)
+			} catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
@@ -300,16 +294,16 @@ public class Executor
 	 * Run a game in asynchronous mode and recorded.
 	 *
 	 * @param pacManController
-	 *            The Pac-Man controller
+	 *                         The Pac-Man controller
 	 * @param ghostController
-	 *            The Ghosts controller
+	 *                         The Ghosts controller
 	 * @param visual
-	 *            Whether to run the game with visuals
+	 *                         Whether to run the game with visuals
 	 * @param fileName
-	 *            The file name of the file that saves the replay
+	 *                         The file name of the file that saves the replay
 	 */
 	public void runGameTimedRecorded(Controller<MOVE> pacManController,
-	        Controller<EnumMap<GHOST, MOVE>> ghostController, boolean visual, String fileName)
+									 Controller<EnumMap<GHOST, MOVE>> ghostController, boolean visual, String fileName)
 	{
 		StringBuilder replay = new StringBuilder();
 
@@ -336,8 +330,7 @@ public class Executor
 			try
 			{
 				Thread.sleep(DELAY);
-			}
-			catch (InterruptedException e)
+			} catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
@@ -360,9 +353,9 @@ public class Executor
 	 * Replay a previously saved game.
 	 *
 	 * @param fileName
-	 *            The file name of the game to be played
+	 *                 The file name of the game to be played
 	 * @param visual
-	 *            Indicates whether or not to use visuals
+	 *                 Indicates whether or not to use visuals
 	 */
 	public void replayGame(String fileName, boolean visual)
 	{
@@ -382,8 +375,7 @@ public class Executor
 			try
 			{
 				Thread.sleep(DELAY);
-			}
-			catch (InterruptedException e)
+			} catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
@@ -404,8 +396,7 @@ public class Executor
 			pw.flush();
 			outS.close();
 
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			System.out.println("Could not save data!");
 		}
@@ -428,8 +419,7 @@ public class Executor
 
 				input = br.readLine();
 			}
-		}
-		catch (IOException ioe)
+		} catch (IOException ioe)
 		{
 			ioe.printStackTrace();
 		}

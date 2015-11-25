@@ -1,5 +1,6 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
+import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Game;
@@ -12,13 +13,13 @@ import pacman.game.Game;
 public class IsGhostEdibleTask extends Task
 {
 
-	public IsGhostEdibleTask(BTPacMan parent)
+	public IsGhostEdibleTask()
 	{
-		super(parent);
+		super();
 	}
 
 	@Override
-	public boolean DoAction(Game game)
+	public boolean DoAction(Game game, BTPacMan parent, GameState state)
 	{
 		if (state.getNearestGhost() == null)
 			return false;

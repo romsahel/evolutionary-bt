@@ -1,5 +1,6 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
+import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Game;
@@ -12,13 +13,13 @@ public class AreGhostFarAwayTask extends Task
 {
     public static int FAR_DISTANCE = 40;
 
-    public AreGhostFarAwayTask(BTPacMan parent)
+    public AreGhostFarAwayTask()
     {
-        super(parent);
+        super();
     }
 
     @Override
-    public boolean DoAction(Game game)
+    public boolean DoAction(Game game, BTPacMan parent, GameState state)
     {
     	if (state.getNearestGhost() == null)
     		return false;

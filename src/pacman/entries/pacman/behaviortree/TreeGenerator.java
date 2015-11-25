@@ -49,34 +49,34 @@ public class TreeGenerator
 	private static final int SEQUENCE_TYPE = 2;
 
 	private Composite rootNode;
-	public final Task[] setOfActions, setOfConditions;
+	public static final Task[] setOfActions = new Task[]
+	{
+		new AvoidPowerpillTask(),
+		new ChasePowerPillTask(),
+		new ChaseTask(),
+		new EatPillTask(),
+		new GoToJunctionTask(),
+		new RunAwayMultipleTask(),
+		new RunAwayTask()
+	};
+	public static final Task[] setOfConditions = new Task[]
+	{
+		new AreGhostFarAwayTask(),
+		new IsGhostCloserTask(),
+		new IsGhostEdibleTask(),
+		new IsGhostNearTask(),
+		new IsPacmanAtJunction(),
+		new IsPathToJunctionSafeTask(),
+		new IsPathToPowerPillSafeTask()
+	};
+
 	private final ArrayList<Leaf> leaves = new ArrayList<>();
 	private final ArrayList<Composite> composites = new ArrayList<>();
 
 	private static final Random random = new Random();
 
-	public TreeGenerator(BTPacMan thisPacman)
+	public TreeGenerator()
 	{
-		setOfActions = new Task[]
-		{
-			new AvoidPowerpillTask(thisPacman),
-			new ChasePowerPillTask(thisPacman),
-			new ChaseTask(thisPacman),
-			new EatPillTask(thisPacman),
-			new GoToJunctionTask(thisPacman),
-			new RunAwayMultipleTask(thisPacman),
-			new RunAwayTask(thisPacman)
-		};
-		setOfConditions = new Task[]
-		{
-			new AreGhostFarAwayTask(thisPacman),
-			new IsGhostCloserTask(thisPacman),
-			new IsGhostEdibleTask(thisPacman),
-			new IsGhostNearTask(thisPacman),
-			new IsPacmanAtJunction(thisPacman),
-			new IsPathToJunctionSafeTask(thisPacman),
-			new IsPathToPowerPillSafeTask(thisPacman)
-		};
 	}
 
 	public Composite generate()

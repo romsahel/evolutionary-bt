@@ -1,5 +1,6 @@
 package pacman.entries.pacman.behaviortree.tasks.actions;
 
+import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants;
@@ -13,13 +14,13 @@ import pacman.game.Game;
 public class ChasePowerPillTask extends Task
 {
 
-	public ChasePowerPillTask(BTPacMan parent)
+	public ChasePowerPillTask()
 	{
-		super(parent);
+		super();
 	}
 
 	@Override
-	public boolean DoAction(Game game)
+	public boolean DoAction(Game game, BTPacMan parent, GameState state)
 	{
 		if (state.getNearestPowerPill() == -1)
 			return false;

@@ -30,6 +30,7 @@ public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 	{
 		super(copy.rootNode);
 	}
+
 	public EvolvingBTPacMan()
 	{
 		super();
@@ -54,9 +55,9 @@ public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 				mutatedParent.getTreeGenerator().getLeaves().remove(index);
 			}
 			else
-				switchLeaf(mutatedParent.getTreeGenerator().setOfConditions, leaf, mutatedParent);
+				switchLeaf(TreeGenerator.setOfConditions, leaf, mutatedParent);
 		else
-			switchLeaf(mutatedParent.getTreeGenerator().setOfActions, leaf, mutatedParent);
+			switchLeaf(TreeGenerator.setOfActions, leaf, mutatedParent);
 
 		return mutatedParent;
 	}
@@ -73,6 +74,7 @@ public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 	public static EvolvingBTPacMan[] combine(EvolvingBTPacMan parent1, EvolvingBTPacMan parent2)
 	{
 		final boolean isComposite = random.nextBoolean();
+//		final boolean isComposite = false;
 		final EvolvingBTPacMan[] result = combine(parent1, parent2, isComposite);
 		if (result == null)
 			return combine(parent1, parent2, !isComposite);
@@ -84,6 +86,10 @@ public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 	 * get a random leaf from the parent1: node1
 	 * get a random leaf from the parent2, matching the type of node1: node2
 	 * <p>
+	 * @param parent1
+	 * @param parent2
+	 * @param isComposite
+	 *                    <p>
 	 * @return
 	 */
 	public static EvolvingBTPacMan[] combine(EvolvingBTPacMan parent1, EvolvingBTPacMan parent2, boolean isComposite)
@@ -97,18 +103,16 @@ public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 		final ArrayList<? extends Node> list1 = getList(result[0], isComposite);
 		final ArrayList<? extends Node> list2 = getList(result[1], isComposite);
 
-		if (list1.size() == 0 || list2.size() == 0)
+		if (list1.isEmpty() || list2.isEmpty())
 			return null;
 
 		final Node node1 = list1.get(random.nextInt(list1.size()));
 		Node node2 = list2.get(random.nextInt(list2.size()));
 
 		if (isComposite)
-			combineComposites(result, (Composite) node1, (Composite) node2, list1, list2);
+			return combineComposites(result, (Composite) node1, (Composite) node2, list1, list2);
 		else
-			combineLeaves(result, (Leaf) node1, (Leaf) node2, list1, list2);
-
-		return result;
+			return combineLeaves(result, (Leaf) node1, (Leaf) node2, list1, list2);
 	}
 
 	private static ArrayList<? extends Node> getList(EvolvingBTPacMan bt, boolean isComposite)
@@ -116,7 +120,7 @@ public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 		return (isComposite) ? bt.getTreeGenerator().getComposites() : bt.getTreeGenerator().getLeaves();
 	}
 
-	private static void combineComposites(final EvolvingBTPacMan[] result,
+	private static EvolvingBTPacMan[] combineComposites(final EvolvingBTPacMan[] result,
 										  Composite node1, Composite node2,
 										  ArrayList<? extends Node> list1,
 										  ArrayList<? extends Node> list2)
@@ -132,6 +136,7 @@ public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 		replaceNode(node2, newNode1, (ArrayList<Composite>) list2);
 
 //		printCompositeCombination(node1, node2);
+		return result;
 	}
 
 	private static void printCompositeCombination(Composite node1, Composite node2)
@@ -154,20 +159,33 @@ public class EvolvingBTPacMan extends BTPacMan implements java.io.Serializable
 				tree.getTreeGenerator().getLeaves().remove((Leaf) child);
 	}
 
-	private static void combineLeaves(final EvolvingBTPacMan[] result,
+	private static EvolvingBTPacMan[] combineLeaves(final EvolvingBTPacMan[] result,
 									  Leaf node1, Leaf node2,
 									  ArrayList<? extends Node> leaves1,
 									  ArrayList<? extends Node> leaves2)
 	{
-		while (node2.type != node1.type || node2.getTask().getClass() == node1.getTask().getClass())
-			node2 = (Leaf) leaves2.get(random.nextInt(leaves2.size()));
+//		ArrayList<Integer> indexes = new ArrayList<>();
+//		for (int i = 0; i < leaves2.size(); i++)
+//			indexes.add(i);
+//
+//		while (node2.type != node1.type || node2.getTask().getClass() == node1.getTask().getClass())
+//		{
+//			if (indexes.isEmpty())
+//				return null;
+//			final int rnd = random.nextInt(indexes.size());
+//			final int index = indexes.get(rnd);
+//			node2 = (Leaf) leaves2.get(index);
+//			indexes.remove(rnd);
+//		}
+		if (node2.type == node1.type)
+			return null;
 
-//		printLeaveCombination(node1, node2);
-
+		// printLeaveCombination(node1, node2);
 		// replace node1 by node2 in result[0] (copy of parent1)
 		replaceNode(node1, new Leaf(node2, node1.parent, result[0]), (ArrayList<Leaf>) leaves1);
 		// replace node2 by node1 in result[1] (copy of parent2)
 		replaceNode(node2, new Leaf(node1, node2.parent, result[1]), (ArrayList<Leaf>) leaves2);
+		return result;
 	}
 
 	private static void printLeaveCombination(Leaf node1, Leaf node2)

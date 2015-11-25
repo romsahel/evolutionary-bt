@@ -1,6 +1,7 @@
 package pacman.entries.pacman.behaviortree.tasks.conditions;
 
 import java.awt.Color;
+import pacman.entries.pacman.GameState;
 
 import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Task;
@@ -17,13 +18,13 @@ import pacman.game.GameView;
 public class IsPathToPowerPillSafeTask extends Task
 {
 
-    public IsPathToPowerPillSafeTask(BTPacMan parent)
+    public IsPathToPowerPillSafeTask()
     {
-        super(parent);
+        super();
     }
 
     @Override
-    public boolean DoAction(Game game)
+    public boolean DoAction(Game game, BTPacMan parent, GameState state)
     {
         final int nearestPowerPill = state.getNearestPowerPill();
         if (nearestPowerPill == -1)

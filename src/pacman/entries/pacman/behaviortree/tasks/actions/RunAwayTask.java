@@ -1,5 +1,6 @@
 package pacman.entries.pacman.behaviortree.tasks.actions;
 
+import pacman.entries.pacman.GameState;
 import pacman.entries.pacman.behaviortree.BTPacMan;
 import pacman.entries.pacman.behaviortree.helpers.Task;
 import pacman.game.Constants;
@@ -12,13 +13,13 @@ import pacman.game.Game;
 public class RunAwayTask extends Task
 {
 
-    public RunAwayTask(BTPacMan parent)
+    public RunAwayTask()
     {
-        super(parent);
+        super();
     }
 
     @Override
-    public boolean DoAction(Game game)
+    public boolean DoAction(Game game, BTPacMan parent, GameState state)
     {
     	if (state.getNearestGhost() == null)
     		return false;

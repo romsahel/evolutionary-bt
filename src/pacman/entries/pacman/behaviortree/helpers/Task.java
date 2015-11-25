@@ -10,14 +10,12 @@ import pacman.game.Game;
  */
 public abstract class Task implements java.io.Serializable
 {
-    protected transient final BTPacMan parent;
-    protected transient final GameState state;
+    protected transient final BTPacMan parent = null;
+    protected transient final GameState state = null;
 
-    public Task(BTPacMan parent)
+    public Task()
     {
-        this.parent = parent;
-        this.state = parent.getState();
     }
 
-    public abstract boolean DoAction(Game game);
+    public abstract boolean DoAction(Game game, BTPacMan parent, GameState state);
 }

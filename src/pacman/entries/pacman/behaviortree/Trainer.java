@@ -47,23 +47,23 @@ public final class Trainer
 	{
 		System.out.println("Training of " + numIterations + " iterations with " + numTrials + " trials.");
 		System.out.println("Creating population of " + populationSize + " individuals...");
+		deserializePopulation();
 		while (population.size() < populationSize)
 			experimentAndAddPacMan(new EvolvingBTPacMan());
 		System.out.println("Population created.");
 
-		population.first().print();
-		serializePopulation();
-		deserializePopulation();
-		population.first().print();
-
 		for (int i = 1; i < numIterations + 1; i++)
 		{
+//			population.first().print();
 			population = processPopulation(population);
 			System.out.println("It " + i + ": population size = " + population.size() + " -- best: " + (population.first().getScore() / numTrials));
 //			System.out.println(Double.toString((population.first().getScore() / numTrials)).replace(".", ","));
 		}
 
+		serializePopulation();
 		bestPacMan = population.first();
+
+		population.clear();
 		return bestPacMan;
 	}
 
@@ -77,7 +77,7 @@ public final class Trainer
 	 *               <p>
 	 * @return
 	 */
-	public TreeSet<EvolvingBTPacMan> processPopulation(TreeSet<EvolvingBTPacMan> inputs)
+	public TreeSet<EvolvingBTPacMan> threadedProcessPopulation(TreeSet<EvolvingBTPacMan> inputs)
 	{
 		int threads = Runtime.getRuntime().availableProcessors();
 		ExecutorService service = Executors.newFixedThreadPool(threads);
@@ -107,13 +107,43 @@ public final class Trainer
 		for (Future<EvolvingBTPacMan[]> future : futures)
 			try
 			{
-				for (EvolvingBTPacMan result : future.get())
+				final EvolvingBTPacMan[] get = future.get();
+				for (EvolvingBTPacMan result : get)
 					if (result != null)
 						outputs.add(result);
 			} catch (InterruptedException | ExecutionException e)
 			{
 				e.printStackTrace();
 			}
+		return outputs;
+	}
+
+	public TreeSet<EvolvingBTPacMan> processPopulation(TreeSet<EvolvingBTPacMan> inputs)
+	{
+		EvolvingBTPacMan prev = null;
+		counter = 0;
+
+		TreeSet<EvolvingBTPacMan> outputs = new TreeSet<>();
+		for (final EvolvingBTPacMan input : inputs)
+		{
+			if (prev != null)
+			{
+				final EvolvingBTPacMan[] combine = EvolvingBTPacMan.combine(prev, input);
+				if (combine != null)
+					for (EvolvingBTPacMan bt : combine)
+					{
+						runExperiment(bt, numTrials);
+						outputs.add(bt);
+					}
+			}
+			runExperiment(input, numTrials);
+			outputs.add(input);
+			counter++;
+
+			prev = input;
+			if (counter >= populationSize / 2)
+				break;
+		}
 		return outputs;
 	}
 
@@ -189,7 +219,7 @@ public final class Trainer
 			try (ObjectInputStream iis = new ObjectInputStream(fis))
 			{
 				int n = iis.readInt();
-				System.out.println(" -- size: " + n + "...");
+				System.out.print(" -- size: " + n + "...");
 				for (int i = 0; i < n; i++)
 				{
 					final Composite composite = (Composite) iis.readObject();
@@ -203,6 +233,7 @@ public final class Trainer
 		{
 			System.err.println("Can't deserialize population: " + e.getClass());
 		}
+		System.out.println();
 		System.out.println("Population: " + population.size() + "/" + populationSize);
 	}
 
