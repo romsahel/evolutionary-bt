@@ -16,9 +16,9 @@ public class MyPacMan extends Controller<MOVE>
 	 */
 	public MyPacMan()
 	{
-		int numIterations = 5;
-		int populationSize = 25;
-		int numTrials = 10;
+		int numIterations = 50;
+		int populationSize = 100;
+		int numTrials = 15;
 		Trainer trainer = new Trainer(numIterations, populationSize, numTrials);
 		bestIndividual = trainer.train();
 		bestIndividual.print();
